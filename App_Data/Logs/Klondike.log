@@ -1,0 +1,3 @@
+2013-12-12 14:40:15,981 INFO   1 LucenePackageRepository UpdatePackageCount Refreshing index. Package count: 36
+2013-12-12 15:01:11,439 INFO   26 LuceneRepositoryConfigurator Dispose Stopping Lucene indexing services.
+2013-12-12 15:01:11,471 INFO   6 PackageIndexer IndexUpdateLoop Update task shutting down.
