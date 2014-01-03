@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NuGet.Lucene</name>
+    </assembly>
+    <members>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.PackagePath">
+            <summary>
+            Directory to hold nupkg files that will be indexed by Lucene.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.LuceneIndexPath">
+            <summary>
+            Directory to hold Lucene index files.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.GroupPackageFilesById">
+            <summary>
+            Flag indicating if packages should be stored in subdirectories
+            grouped by package ID or if they should all be stored in the
+            top level directory. Defaults to <code>true</code>.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.EnablePackageFileWatcher">
+            <summary>
+            Flag that enables PackagePath to be monitored
+            for file system events and to keep the Lucene
+            index in sync when packages are created, modified
+            or deleted. This functionality will keep the
+            Lucene index up to date even when packages
+            are changed on the file system without using
+            the methods on LucenePackageRepository.
+            Defaults to <code>false</code>.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.PackageHashAlgorithm">
+            <summary>
+            Specify the cryptographic hashing algorithm
+            to use for calculating package hashes.
+            Defaults to SHA512.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.Repository">
+            <summary>
+            Holds a reference to the configured package repository
+            after <see cref="M:NuGet.Lucene.LuceneRepositoryConfigurator.Initialize"/> has been invoked.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.Provider">
+            <summary>
+            Holds a reference to the LINQ data provider after
+            <see cref="M:NuGet.Lucene.LuceneRepositoryConfigurator.Initialize"/> has been invoked.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.LuceneDirectory">
+            <summary>
+            Holds a reference to the Lucene Directory after
+            <see cref="M:NuGet.Lucene.LuceneRepositoryConfigurator.Initialize"/> has been invoked.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.GroupingPackagePathResolver">
+            <summary>
+            Groups packages into subfolders based on their id so that
+            all versions of a package go into the same subfolder.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Util.CollectionExtensions.TakeAvailable``1(System.Collections.Concurrent.BlockingCollection{``0},System.Collections.Generic.IList{``0},System.TimeSpan)">
+            <summary>
+            Waiting up to <paramref name="firstItemTimeout">firstItemTimeout</paramref>
+            for the first item to become available, then return all other items that
+            are immediately available.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.AddPackageAsync(NuGet.IPackage)">
+            <summary>
+            Async implementation of <see cref="M:NuGet.IPackageRepository.AddPackage(NuGet.IPackage)"/>.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.RemovePackageAsync(NuGet.IPackage)">
+            <summary>
+            Async implementation of <see cref="M:NuGet.IPackageRepository.RemovePackage(NuGet.IPackage)"/>.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.SynchronizeWithFileSystem(System.Threading.CancellationToken)">
+            <summary>
+            Scans the packages directory and compares it with
+            packages in the Lucene index, then applies changes
+            to the Lucene index to synchronize it.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.GetStatus">
+            <summary>
+            Gets an object that contains information about
+            current indexing activity.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.LoadFromIndex(System.String)">
+            <summary>
+            Loads pacakge data from the Lucene index with a given path.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.LoadFromFileSystem(System.String)">
+            <summary>
+            Loads a package from disk with a given path, then
+            converts it to a <c cref="T:NuGet.Lucene.LucenePackage"/> using <c cref="M:NuGet.Lucene.ILucenePackageRepository.Convert(NuGet.IPackage)"/>.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.Convert(NuGet.IPackage)">
+            <summary>
+            Converts a given generic <c cref="T:NuGet.IPackage"/> and returns
+            a <c cref="T:NuGet.Lucene.LucenePackage"/> that holds additional information
+            such as package hash, size, etc.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.IncrementDownloadCount(NuGet.IPackage)">
+            <summary>
+            Increments the <see cref="P:NuGet.Lucene.LucenePackage.VersionDownloadCount"/> for 
+            this package and the <see cref="P:NuGet.Lucene.LucenePackage.DownloadCount"/> for
+            all packages with the same <see cref="P:NuGet.Lucene.LucenePackage.Id"/>.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.ILucenePackageRepository.LucenePackages">
+            <summary>
+            Provides access to more strongly typed packages to facilitate
+            querying on properties not found on <see cref="T:NuGet.IPackage"/>.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.IndexDifferences.NewPackages">
+            <summary>
+            Packages on the files system but not in the index.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.IndexDifferences.MissingPackages">
+            <summary>
+            Packages in the index that are no longer found on the file system.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.IndexDifferences.ModifiedPackages">
+            <summary>
+            Packages in the index and also in the file system where the modification timestamp is out of sync.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.IndexDifferences.IsEmpty">
+            <summary>
+            Returns <code>true</code> when no differences are found.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.IPackageIndexer.GetIndexingStatus">
+            <summary>
+            Gets status of index building activity.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.IPackageIndexer.StatusChanged">
+            <summary>
+            Raised whenever status changes.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.LucenePackage">
+            <summary>
+            Representation of a NuGet package stored/retrieved in a Lucene index.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.PackageFileSystemWatcher.QuietTime">
+            <summary>
+            Sets the amount of time to wait after receiving a <c cref="E:System.IO.FileSystemWatcher.Changed">Changed</c>
+            event before attempting to index a package. This timeout is meant to avoid trying to read a package
+            while it is still being built or copied into place.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.PackageIndexer.GetIndexingStatus">
+            <summary>
+            Gets status of index building activity.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.StrictSemanticVersion">
+            <summary>
+            Decorates sealed class SemanticVersion from NuGet.Core with one that
+            only considers two instances to be equal when their original strings
+            are equal. SemanticVersion considers two instances to be equal when
+            the Version part is semantically equal but formatted differently.
+            For example, the versions 1.0 and 1.0.0 are considered equal by
+            SemanticVersion, whereas this class treats them as not equal.
+            </summary>
+        </member>
+    </members>
+</doc>

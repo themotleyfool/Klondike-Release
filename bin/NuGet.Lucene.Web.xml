@@ -1,0 +1,309 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NuGet.Lucene.Web</name>
+    </assembly>
+    <members>
+        <member name="T:NuGet.Lucene.Web.Formatters.NuGetHtmlMicrodataFormatter">
+            <summary>
+            Extends <see cref="T:AspNet.WebApi.HtmlMicrodataFormatter.HtmlMicrodataFormatter"/> to include
+            customizations that improve markup for packages and related content.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Models.DelegatingPackageRepository">
+            <summary>
+            A package repository base class suitable for decoration and composition.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Key">
+            <summary>
+            API Key to be used by nuget to authenticate as this user.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Roles">
+            <summary>
+            Roles granted to this user.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Modules.AnonymousPackageManagerModule">
+            <summary>
+            When the request has not already been authenticated, this
+            module will authenticate the user and grant the
+            <see cref="F:NuGet.Lucene.Web.RoleNames.PackageManager"/> role.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Modules.LocalRequestAuthenticationModule">
+            <summary>
+            When <see cref="P:System.Web.HttpRequestBase.IsLocal"/> is true,
+            and the request has not already been authenticated, this module
+            will authenticate the user as <c>"LocalAdministrator"</c>
+            and grant all roles in <see cref="P:NuGet.Lucene.Web.RoleNames.All"/>.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Controllers.NuGetDocumentationController">
+            <summary>
+            Provides documentation and semantic information about various
+            resources and actions configured for use in this application.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.NuGetDocumentationController.GetApiDocumentation">
+            <summary>
+            Probably the document you are reading now.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Controllers.IndexingController">
+            <summary>
+            <para>
+            Shows current status for indexing activity and provides methods to
+            manually start the synchronization process or cancel a process in flight.
+            </para>
+            <para>
+            The synchronization process keeps the Lucene index in sync with NuGet
+            packages on disk by comparing package file modification times with those
+            found in the Lucene index. Any changes that are detected are reconciled
+            treating the package files as the authoritative data source.
+            </para>
+            <para>
+            Configuration settings found in Web.config control whether synchronization
+            should start automatically when the application starts and can also enable
+            an optional file system watcher to observe changes to package files in real
+            time and keep the index up to date.
+            </para>
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.IndexingController.Status">
+            <summary>
+            Retrieve information about current activity as well as some statistics
+            such as total number of packages in the repository.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.IndexingController.Synchronize">
+            <summary>
+            Starts a new synchronization process if one is not already running.
+            This method will return immediately instead of waiting for the
+            synchronization to complete.
+            </summary>
+            <returns>
+            <c>200 OK</c> when a new process is accepted and started.
+            <c>409 Conflict</c> when a process is already running.
+            </returns>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.IndexingController.Cancel">
+            <summary>
+            Cancels a running synchronization process. This method makes no
+            attempt to cancel a specific synchronization process or even
+            verify that one is running. This method requests cancelation
+            but returns immediately without waiting until process has
+            actually ended.
+            </summary>
+            <returns><c>200 OK</c></returns>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Controllers.PackagesController">
+            <summary>
+            Provides methods to search, get metadata, download, upload and delete packages.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.GetPackageInfo(System.String,System.String)">
+            <summary>
+            Gets metadata about a package from the <c>nuspec</c> files and other
+            metadata such as package size, date published, download counts, etc.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.DownloadPackage(System.String,System.String)">
+            <summary>
+            Downloads the complete <c>.nupkg</c> content. The HTTP HEAD method
+            is also supported for verifying package size, and modification date.
+            The <c>ETag</c> response header will contain the md5 hash of the
+            package content.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.Search(System.String,System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            Searches for packages that match <paramref name="query"/>, or if no query
+            is provided, returns all packages in the repository.
+            </summary>
+            <param name="query">Search terms. May include special characters to support prefix,
+            wildcard or phrase queries.
+            </param>
+            <param name="includePrerelease">Specify <c>true</c> to look for pre-release packages.</param>
+            <param name="offset">Number of results to skip, for pagination.</param>
+            <param name="count">Number of results to return, for pagination.</param>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.DeletePackage(System.String,System.String)">
+            <summary>
+            Permanently delete a package from the repository.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.PutPackage(NuGet.IPackage)">
+            <summary>
+            Upload a package to the repository. If a package already exists
+            with the same Id and Version, it will be replaced with the new package.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Controllers.TabCompletionController">
+            <summary>
+            Actions that enable fast tab-completion from the Package Manager Console in Visual Studio. The interface for
+            these actions is documented at <a href="https://github.com/NuGet/NuGetGallery/wiki/Tab-Completion-API-Endpoints">https://github.com/NuGet/NuGetGallery/wiki/Tab-Completion-API-Endpoints</a>.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.TabCompletionController.GetMatchingPackages(System.String,System.Boolean,System.Int32)">
+            <summary>
+            Find packages that start with <paramref name="partialId"/>.
+            </summary>
+            <param name="partialId">The pattern to match (case insensitive)</param>
+            <param name="includePrerelease">Flag indicating if pre-release packages should be returned (false by default)</param>
+            <param name="maxResults">Maximum results to return</param>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.TabCompletionController.GetPackageVersions(System.String,System.Boolean)">
+            <summary>
+            Finds versions of a given package.
+            </summary>
+            <param name="packageId">The complete package id</param>
+            <param name="includePrerelease">Flag indicating if pre-release package versions should be included (false by default)</param>
+            <returns>Set of available versions that match</returns>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Controllers.UsersController">
+            <summary>
+            <para>
+            Provides methods to view, create and delete users and api keys for authentication.
+            </para>
+            <para>
+            Clients can authenticate using api keys by setting the <c>X-NuGet-ApiKey</c> header
+            on requests.
+            </para>
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.UsersController.GetAllUsers">
+            <summary>
+            Retrieves a list of all users.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.UsersController.Get(System.String)">
+            <summary>
+            Retrieve information about a user.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.UsersController.Put(System.String,NuGet.Lucene.Web.Models.UserAttributes)">
+            <summary>
+            Creates or replaces a user.
+            </summary>
+            <param name="username"></param>
+            <param name="key">API key to set for user (optional). If not specified, a GUID will be generated and used as the key.</param>
+            <param name="roles">Roles to grant user.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.UsersController.GetAuthenticationInfo">
+            <summary>
+            Retrieves information about the logged-in user
+            including name and api key. If the session has
+            not been authenticated, returns a 206 No Content
+            response with an empty body.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.UsersController.GetRequiredAuthenticationInfo">
+            <summary>
+            Retrieves information about the logged-in user
+            including name and api key. If the request has
+            not been authenticated, this method will force
+            authentication to occur before retrieving
+            information.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.DataServices.PackageDataSource.OpportunisticallyPrefetchPackageFromOriginWhenNecessary">
+            <summary>
+            When (a) the client is looking for a particular package version, and
+            (b) package mirroring is enabled, and (c) the package is not in the
+            local repository, mirror it before the query is executed.
+            
+            This method enables automatic mirroring of packages during a package
+            restore with nuget client version 2.7.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.DataServices.PackageDataService">
+            <summary>
+            WCF Data Services / OData provider for Lucene based NuGet package repository.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.DataServices.HttpContextWrapperWithRequest">
+            <summary>
+            Allow HttpContext.Request to be replaced with an arbitrary HttpRequestBase instance.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.DataServices.EmptyInputStreamHttpRequestWrapper">
+            <summary>
+            Prevents "System.Web.HttpException (0x80004005): This method or property is not
+            supported after HttpRequest.GetBufferlessInputStream has been invoked." from being
+            thrown at System.Web.HttpRequest.get_InputStream().
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Formatters.MultipartFormDataMediaFormatter`1.FixIncompleteMultipartContent(System.Net.Http.HttpContent)">
+            <summary>
+            The NuGet client does not include a new line after the final boundary marker
+            which causes <see cref="M:System.Net.Http.HttpContentMultipartExtensions.ReadAsMultipartAsync(System.Net.Http.HttpContent)"/>
+            to throw <see cref="T:System.IO.IOException"/> "Unexpected end of MIME multipart stream.
+            MIME multipart message is not complete."
+            
+            This method appends a newline to the request body when missing.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Hubs.StatusHub">
+            <summary>
+            Provides SignalR powered updates as indexing activity changes.
+            Clients can implement the <c>updateStatus</c> method on the <c>status</c>
+            hub to receive notification when status changes.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:NuGet.Lucene.Web.MessageHandlers.CrossOriginMessageHandler" -->
+        <member name="F:NuGet.Lucene.Web.RoleNames.AccountAdministrator">
+            <summary>
+            Allowed to create and delete accounts,
+            grant and revoke roles,
+            view and change API keys for all accounts
+            </summary>
+        </member>
+        <member name="F:NuGet.Lucene.Web.RoleNames.PackageManager">
+            <summary>
+            Allowed to create, delete or overwrite packages,
+            explicitly synchronize packages on disk with index
+            or cancel ongoing synchronization.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.RoleNames.All">
+            <summary>
+            Array of all roles used by NuGet.Lucene.Web.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.SelectiveCamelCaseContractResolver">
+            <summary>
+            Uses default contract resolver for types in the SignalR assembly
+            and camel case for all other types.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Util.TaskUtils.FireAndForget(System.Func{System.Threading.Tasks.Task},System.Action{System.Exception})">
+            <summary>
+            This method enables a Task to be started from asp.net 4.5 without requiring an async method to await it.
+            </summary>
+            <remarks>
+                When executing an async method in asp.net 4.5 associated with a request and failing to wait for the task
+                to complete will result in an exception like the following to be thrown.
+                <code>
+                    System.AggregateException: A Task's exception(s) were not observed either by Waiting on the Task
+                    or accessing its Exception property. As a result, the unobserved exception was rethrown by the
+                    finalizer thread. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+                       at System.Web.ThreadContext.AssociateWithCurrentThread(Boolean setImpersonationContext)
+                       at System.Web.HttpApplication.OnThreadEnterPrivate(Boolean setImpersonationContext)
+                       at System.Web.HttpApplication.System.Web.Util.ISyncContext.Enter()
+                       at System.Web.Util.SynchronizationHelper.SafeWrapCallback(Action action)
+                       at System.Threading.Tasks.Task.Execute()
+                       --- End of inner exception stack trace ---
+                    ---> (Inner Exception #0) System.NullReferenceException: Object reference not set to an instance of an object.
+                       at System.Web.ThreadContext.AssociateWithCurrentThread(Boolean setImpersonationContext)
+                       at System.Web.HttpApplication.OnThreadEnterPrivate(Boolean setImpersonationContext)
+                       at System.Web.HttpApplication.System.Web.Util.ISyncContext.Enter()
+                       at System.Web.Util.SynchronizationHelper.SafeWrapCallback(Action action)
+                       at System.Threading.Tasks.Task.Execute()
+                </code>
+            </remarks>
+        </member>
+    </members>
+</doc>
