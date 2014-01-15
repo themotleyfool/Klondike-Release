@@ -4,6 +4,183 @@
         <name>Remotion.Linq</name>
     </assembly>
     <members>
+        <member name="T:JetBrains.Annotations.AssertionConditionAttribute">
+            <summary>
+            Indicates the condition parameter of the assertion method. 
+            The method itself should be marked by <see cref="T:JetBrains.Annotations.AssertionMethodAttribute"/> attribute.
+            The mandatory argument of the attribute is the assertion type.
+            </summary>
+            <seealso cref="T:JetBrains.Annotations.AssertionConditionType"/>
+        </member>
+        <member name="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+            <summary>
+            Initializes new instance of AssertionConditionAttribute
+            </summary>
+            <param name="conditionType">Specifies condition type</param>
+        </member>
+        <member name="P:JetBrains.Annotations.AssertionConditionAttribute.ConditionType">
+            <summary>
+            Gets condition type
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.AssertionConditionType">
+            <summary>
+            Specifies assertion type. If the assertion method argument satisifes the condition, then the execution continues. 
+            Otherwise, execution is assumed to be halted
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.AssertionConditionType.IS_TRUE">
+            <summary>
+            Indicates that the marked parameter should be evaluated to true
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.AssertionConditionType.IS_FALSE">
+            <summary>
+            Indicates that the marked parameter should be evaluated to false
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.AssertionConditionType.IS_NULL">
+            <summary>
+            Indicates that the marked parameter should be evaluated to null value
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.AssertionConditionType.IS_NOT_NULL">
+            <summary>
+            Indicates that the marked parameter should be evaluated to not null value
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.AssertionMethodAttribute">
+            <summary>
+            Indicates that the marked method is assertion method, i.e. it halts control flow if one of the conditions is satisfied. 
+            To set the condition, mark one of the parameters with <see cref="T:JetBrains.Annotations.AssertionConditionAttribute"/> attribute
+            </summary>
+            <seealso cref="T:JetBrains.Annotations.AssertionConditionAttribute"/>
+        </member>
+        <member name="T:JetBrains.Annotations.InvokerParameterNameAttribute">
+            <summary>
+            Indicates that the function argument should be string literal and match one of the parameters of the caller function.
+            For example, <see cref="T:System.ArgumentNullException"/> has such parameter.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.NoEnumerationAttribute">
+            <summary>
+            Indicates that IEnumarable, passed as parameter, is not enumerated.
+            
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that marked method builds string by format pattern and (optional) arguments. 
+            Parameter, which contains format string, should be given in constructor.
+            The format string should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/> -like form
+            </summary>
+        </member>
+        <member name="M:JetBrains.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <summary>
+            Initializes new instance of StringFormatMethodAttribute
+            </summary>
+            <param name="formatParameterName">Specifies which parameter of an annotated method should be treated as format-string</param>
+        </member>
+        <member name="P:JetBrains.Annotations.StringFormatMethodAttribute.FormatParameterName">
+            <summary>
+            Gets format parameter name
+            </summary>
+        </member>
+        <member name="T:Remotion.Utilities.ArgumentUtility">
+            <summary>
+            This utility class provides methods for checking arguments.
+            </summary>
+            <remarks>
+            Some methods of this class return the value of the parameter. In some cases, this is useful because the value will be converted to another 
+            type:
+            <code><![CDATA[
+            void foo (object o) 
+            {
+              int i = ArgumentUtility.CheckNotNullAndType<int> ("o", o);
+            }
+            ]]></code>
+            In some other cases, the input value is returned unmodified. This makes it easier to use the argument checks in calls to base class constructors
+            or property setters:
+            <code><![CDATA[
+            class MyType : MyBaseType
+            {
+              public MyType (string name) : base (ArgumentUtility.CheckNotNullOrEmpty ("name", name))
+              {
+              }
+            
+              public override Name
+              {
+                set { base.Name = ArgumentUtility.CheckNotNullOrEmpty ("value", value); }
+              }
+            }
+            ]]></code>
+            </remarks>
+        </member>
+        <member name="M:Remotion.Utilities.ArgumentUtility.CheckNotNullAndType``1(System.String,System.Object)">
+            <summary>Returns the value itself if it is not <see langword="null"/> and of the specified value type.</summary>
+            <typeparam name="TExpected"> The type that <paramref name="actualValue"/> must have. </typeparam>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="actualValue"/> is a <see langword="null"/>.</exception>
+            <exception cref="T:System.ArgumentException">The <paramref name="actualValue"/> is an instance of another type.</exception>
+        </member>
+        <member name="M:Remotion.Utilities.ArgumentUtility.CheckType``1(System.String,System.Object)">
+            <summary>Returns the value itself if it is of the specified type.</summary>
+            <typeparam name="TExpected"> The type that <paramref name="actualValue"/> must have. </typeparam>
+            <exception cref="T:System.ArgumentException"> 
+                <paramref name="actualValue"/> is an instance of another type (which is not a subtype of <typeparamref name="TExpected"/>).</exception>
+            <exception cref="T:System.ArgumentNullException"> 
+                <paramref name="actualValue"/> is null and <typeparamref name="TExpected"/> cannot be null. </exception>
+            <remarks>
+              For non-nullable value types, you should use either <see cref="M:Remotion.Utilities.ArgumentUtility.CheckNotNullAndType``1(System.String,System.Object)"/> or pass the type 
+              <see cref="T:System.Nullable`1"/> instead.
+            </remarks>
+        </member>
+        <member name="M:Remotion.Utilities.ArgumentUtility.CheckNotNullAndTypeIsAssignableFrom(System.String,System.Type,System.Type)">
+            <summary>Checks whether <paramref name="actualType"/> is not <see langword="null"/> and can be assigned to <paramref name="expectedType"/>.</summary>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="actualType"/> is <see langword="null"/>.</exception>
+            <exception cref="T:System.ArgumentException">The <paramref name="actualType"/> cannot be assigned to <paramref name="expectedType"/>.</exception>
+        </member>
+        <member name="M:Remotion.Utilities.ArgumentUtility.CheckTypeIsAssignableFrom(System.String,System.Type,System.Type)">
+            <summary>Checks whether <paramref name="actualType"/> can be assigned to <paramref name="expectedType"/>.</summary>
+            <exception cref="T:System.ArgumentException">The <paramref name="actualType"/> cannot be assigned to <paramref name="expectedType"/>.</exception>
+        </member>
+        <member name="M:Remotion.Utilities.ArgumentUtility.CheckItemsType``1(System.String,``0,System.Type)">
+            <summary>Checks whether all items in <paramref name="collection"/> are of type <paramref name="itemType"/> or a null reference.</summary>
+            <exception cref="T:System.ArgumentException"> If at least one element is not of the specified type or a derived type. </exception>
+        </member>
+        <member name="M:Remotion.Utilities.ArgumentUtility.CheckItemsNotNullAndType``1(System.String,``0,System.Type)">
+            <summary>Checks whether all items in <paramref name="collection"/> are of type <paramref name="itemType"/> and not null references.</summary>
+            <exception cref="T:System.ArgumentException"> If at least one element is not of the specified type or a derived type. </exception>
+            <exception cref="T:System.ArgumentNullException"> If at least one element is a null reference. </exception>
+        </member>
+        <member name="T:Remotion.Utilities.Assertion">
+            <summary>
+            Provides methods that throw an <see cref="T:System.InvalidOperationException"/> if an assertion fails.
+            </summary>
+            <remarks>
+              <para>
+              This class contains methods that are conditional to the DEBUG and TRACE attributes (<see cref="M:Remotion.Utilities.Assertion.DebugAssert(System.Boolean)"/> and <see cref="M:Remotion.Utilities.Assertion.TraceAssert(System.Boolean)"/>). 
+              </para><para>
+              Note that assertion expressions passed to these methods are not evaluated (read: executed) if the respective symbol are not defined during
+              compilation, nor are the methods called. This increases performance for production builds, but make sure that your assertion expressions do
+              not cause any side effects! See <see cref="T:System.Diagnostics.ConditionalAttribute"/> or <see cref="T:System.Diagnostics.Debug"/> and <see cref="T:System.Diagnostics.Trace"/> the for more information 
+              about conditional compilation.
+              </para><para>
+              Assertions are no replacement for checking input parameters of public methods (see <see cref="T:Remotion.Utilities.ArgumentUtility"/>).  
+              </para>
+            </remarks>
+        </member>
+        <member name="M:Remotion.Utilities.NullableTypeUtility.IsNullableType(System.Type)">
+            <summary>
+            Determines whether a type is nullable, ie. whether variables of it can be assigned <see langword="null"/>.
+            </summary>
+            <param name="type">The type to check.</param>
+            <returns>
+            true if <paramref name="type"/> is nullable; otherwise, false.
+            </returns>
+            <remarks>
+            A type is nullable if it is a reference type or a nullable value type. This method returns false only for non-nullable value types.
+            </remarks>
+        </member>
         <member name="T:Remotion.Linq.Clauses.AdditionalFromClause">
             <summary>
             Represents a data source in a query that adds new data items in addition to those provided by the <see cref="T:Remotion.Linq.Clauses.MainFromClause"/>.
@@ -3252,7 +3429,7 @@
         </member>
         <member name="T:Remotion.Linq.Parsing.Structure.IntermediateModel.SumExpressionNode">
             <summary>
-            Represents a <see cref="T:System.Linq.Expressions.MethodCallExpression"/> for the different overloads of <see cref="M:System.Linq.Queryable.Sum(System.Linq.IQueryable{System.Int32})"/>.
+            Represents a <see cref="T:System.Linq.Expressions.MethodCallExpression"/> for the different overloads of <see cref="O:System.Linq.Queryable.Sum"/>.
             It is generated by <see cref="T:Remotion.Linq.Parsing.Structure.ExpressionTreeParser"/> when an <see cref="T:System.Linq.Expressions.Expression"/> tree is parsed.
             When this node is used, it marks the beginning (i.e. the last node) of an <see cref="T:Remotion.Linq.Parsing.Structure.IntermediateModel.IExpressionNode"/> chain that represents a query.
             </summary>
@@ -3988,190 +4165,9 @@
             TODO: add summary
             </summary>
         </member>
-        <member name="T:Remotion.Linq.Utilities.ArgumentEmptyException">
-            <summary>
-            This exception is thrown if an argument is empty although it must have a content.
-            </summary>
-        </member>
-        <member name="T:Remotion.Linq.Utilities.ArgumentTypeException">
-            <summary>
-            This exception is thrown if an argument has an invalid type.
-            </summary>
-        </member>
-        <member name="T:Remotion.Linq.Utilities.ArgumentUtility">
-            <summary>
-            This utility class provides methods for checking arguments.
-            </summary>
-            <remarks>
-            Some methods of this class return the value of the parameter. In some cases, this is useful because the value will be converted to another 
-            type:
-            <code><![CDATA[
-            void foo (object o) 
-            {
-              int i = ArgumentUtility.CheckNotNullAndType<int> ("o", o);
-            }
-            ]]></code>
-            In some other cases, the input value is returned unmodified. This makes it easier to use the argument checks in calls to base class constructors
-            or property setters:
-            <code><![CDATA[
-            class MyType : MyBaseType
-            {
-              public MyType (string name) : base (ArgumentUtility.CheckNotNullOrEmpty ("name", name))
-              {
-              }
-            
-              public override Name
-              {
-                set { base.Name = ArgumentUtility.CheckNotNullOrEmpty ("value", value); }
-              }
-            }
-            ]]></code>
-            </remarks>
-        </member>
-        <member name="M:Remotion.Linq.Utilities.ArgumentUtility.CheckNotNullAndType``1(System.String,System.Object)">
-            <summary>Returns the value itself if it is not <see langword="null"/> and of the specified value type.</summary>
-            <typeparam name="TExpected"> The type that <paramref name="actualValue"/> must have. </typeparam>
-            <exception cref="T:System.ArgumentNullException">The <paramref name="actualValue"/> is a <see langword="null"/>.</exception>
-            <exception cref="T:Remotion.Linq.Utilities.ArgumentTypeException">The <paramref name="actualValue"/> is an instance of another type.</exception>
-        </member>
-        <member name="M:Remotion.Linq.Utilities.ArgumentUtility.CheckTypeIsAssignableFrom(System.String,System.Type,System.Type)">
-            <summary>Checks whether <paramref name="actualType"/> can be assigned to <paramref name="expectedType"/>.</summary>
-            <exception cref="T:Remotion.Linq.Utilities.ArgumentTypeException">The <paramref name="actualType"/> cannot be assigned to <paramref name="expectedType"/>.</exception>
-        </member>
-        <member name="T:Remotion.Linq.Utilities.HashCodeUtility">
-            <summary>
-            Provides functionality to calculate hash codes from values and sequences.
-            </summary>
-        </member>
         <member name="T:Remotion.Linq.Utilities.RegistryBase`3">
             <summary>
             <see cref="T:Remotion.Linq.Utilities.RegistryBase`3"/> provides code which is common in all registry classes.
-            </summary>
-        </member>
-        <member name="T:JetBrains.Annotations.AssertionConditionAttribute">
-            <summary>
-            Indicates the condition parameter of the assertion method. 
-            The method itself should be marked by <see cref="T:JetBrains.Annotations.AssertionMethodAttribute"/> attribute.
-            The mandatory argument of the attribute is the assertion type.
-            </summary>
-            <seealso cref="T:JetBrains.Annotations.AssertionConditionType"/>
-        </member>
-        <member name="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
-            <summary>
-            Initializes new instance of AssertionConditionAttribute
-            </summary>
-            <param name="conditionType">Specifies condition type</param>
-        </member>
-        <member name="P:JetBrains.Annotations.AssertionConditionAttribute.ConditionType">
-            <summary>
-            Gets condition type
-            </summary>
-        </member>
-        <member name="T:JetBrains.Annotations.AssertionConditionType">
-            <summary>
-            Specifies assertion type. If the assertion method argument satisifes the condition, then the execution continues. 
-            Otherwise, execution is assumed to be halted
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.AssertionConditionType.IS_TRUE">
-            <summary>
-            Indicates that the marked parameter should be evaluated to true
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.AssertionConditionType.IS_FALSE">
-            <summary>
-            Indicates that the marked parameter should be evaluated to false
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.AssertionConditionType.IS_NULL">
-            <summary>
-            Indicates that the marked parameter should be evaluated to null value
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.AssertionConditionType.IS_NOT_NULL">
-            <summary>
-            Indicates that the marked parameter should be evaluated to not null value
-            </summary>
-        </member>
-        <member name="T:JetBrains.Annotations.AssertionMethodAttribute">
-            <summary>
-            Indicates that the marked method is assertion method, i.e. it halts control flow if one of the conditions is satisfied. 
-            To set the condition, mark one of the parameters with <see cref="T:JetBrains.Annotations.AssertionConditionAttribute"/> attribute
-            </summary>
-            <seealso cref="T:JetBrains.Annotations.AssertionConditionAttribute"/>
-        </member>
-        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.Access">
-            <summary>
-            Only entity marked with attribute considered used
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.Assign">
-            <summary>
-            Indicates implicit assignment to a member
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
-            <summary>
-            Indicates implicit instantiation of a type with fixed constructor signature.
-            That means any unused constructor parameters won't be reported as such.
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
-            <summary>
-            Indicates implicit instantiation of a type
-            </summary>
-        </member>
-        <member name="T:JetBrains.Annotations.ImplicitUseTargetFlags">
-            <summary>
-            Specify what is considered used implicitly when marked with <see cref="T:JetBrains.Annotations.MeansImplicitUseAttribute"/> or <see cref="T:JetBrains.Annotations.UsedImplicitlyAttribute"/>
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.ImplicitUseTargetFlags.Members">
-            <summary>
-            Members of entity marked with attribute are considered used
-            </summary>
-        </member>
-        <member name="F:JetBrains.Annotations.ImplicitUseTargetFlags.WithMembers">
-            <summary>
-            Entity marked with attribute and all its members considered used
-            </summary>
-        </member>
-        <member name="T:JetBrains.Annotations.InvokerParameterNameAttribute">
-            <summary>
-            Indicates that the function argument should be string literal and match one  of the parameters of the caller function.
-            For example, <see cref="T:System.ArgumentNullException"/> has such parameter.
-            </summary>
-        </member>
-        <member name="T:JetBrains.Annotations.MeansImplicitUseAttribute">
-            <summary>
-            Should be used on attributes and causes ReSharper to not mark symbols marked with such attributes as unused (as well as by other usage inspections)
-            </summary>
-        </member>
-        <member name="P:JetBrains.Annotations.MeansImplicitUseAttribute.TargetFlags">
-            <summary>
-            Gets value indicating what is meant to be used
-            </summary>
-        </member>
-        <member name="T:JetBrains.Annotations.NoEnumerationAttribute">
-            <summary>
-            Indicates that IEnumarable, passed as parameter, is not enumerated.
-            
-            </summary>
-        </member>
-        <member name="T:JetBrains.Annotations.UsedImplicitlyAttribute">
-            <summary>
-            Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
-            so this symbol will not be marked as unused (as well as by other usage inspections)
-            </summary>
-        </member>
-        <member name="P:JetBrains.Annotations.UsedImplicitlyAttribute.TargetFlags">
-            <summary>
-            Gets value indicating what is meant to be used
-            </summary>
-        </member>
-        <member name="T:Remotion.Linq.Utilities.SeparatedStringBuilder">
-            <summary>
-            Builds a string from a sequence, separating each item with a given separator string.
             </summary>
         </member>
     </members>
