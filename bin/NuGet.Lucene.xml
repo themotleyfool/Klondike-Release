@@ -64,6 +64,11 @@
             all versions of a package go into the same subfolder.
             </summary>
         </member>
+        <member name="T:NuGet.Lucene.SearchSortField">
+            <summary>
+            Specify how to sort results in <see cref="M:NuGet.Lucene.ILucenePackageRepository.Search(NuGet.Lucene.SearchCriteria)"/>.
+            </summary>
+        </member>
         <member name="M:NuGet.Lucene.Util.CollectionExtensions.TakeAvailable``1(System.Collections.Concurrent.BlockingCollection{``0},System.Collections.Generic.IList{``0},System.TimeSpan)">
             <summary>
             Waiting up to <paramref name="firstItemTimeout">firstItemTimeout</paramref>
@@ -117,6 +122,12 @@
             Increments the <see cref="P:NuGet.Lucene.LucenePackage.VersionDownloadCount"/> for 
             this package and the <see cref="P:NuGet.Lucene.LucenePackage.DownloadCount"/> for
             all packages with the same <see cref="P:NuGet.Lucene.LucenePackage.Id"/>.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.Search(NuGet.Lucene.SearchCriteria)">
+            <summary>
+            Overload of <see cref="M:NuGet.IServiceBasedRepository.Search(System.String,System.Collections.Generic.IEnumerable{System.String},System.Boolean)"/>
+            using parameter object for better flexibility.
             </summary>
         </member>
         <member name="P:NuGet.Lucene.ILucenePackageRepository.LucenePackages">

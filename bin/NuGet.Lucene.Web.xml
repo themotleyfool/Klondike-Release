@@ -15,6 +15,11 @@
             A package repository base class suitable for decoration and composition.
             </summary>
         </member>
+        <member name="P:NuGet.Lucene.Web.Models.KeyChangeRequest.Key">
+            <summary>
+            The new key to set. If blank, one wil be generated.
+            </summary>
+        </member>
         <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Key">
             <summary>
             API Key to be used by nuget to authenticate as this user.
@@ -23,6 +28,17 @@
         <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Roles">
             <summary>
             Roles granted to this user.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Overwrite">
+            <summary>
+            When <c>false</c>, prevent overwriting existing users.
+            Default is <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.UpdateUserAttributes.RenameTo">
+            <summary>
+            When set, requests that a user is renamed to this value.
             </summary>
         </member>
         <member name="T:NuGet.Lucene.Web.Modules.AnonymousPackageManagerModule">
@@ -117,7 +133,7 @@
             package content.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.Search(System.String,System.Boolean,System.Int32,System.Int32)">
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.Search(System.String,System.Boolean,System.Int32,System.Int32,NuGet.Lucene.PackageOriginFilter,NuGet.Lucene.SearchSortField,NuGet.Lucene.SearchSortDirection)">
             <summary>
             Searches for packages that match <paramref name="query"/>, or if no query
             is provided, returns all packages in the repository.
@@ -128,6 +144,9 @@
             <param name="includePrerelease">Specify <c>true</c> to look for pre-release packages.</param>
             <param name="offset">Number of results to skip, for pagination.</param>
             <param name="count">Number of results to return, for pagination.</param>
+            <param name="originFilter">Limit result to mirrored or local packages, or both.</param>
+            <param name="sort">Specify field to sort results on. Score (relevance) is default.</param>
+            <param name="order">Sort order (default:ascending or descending)</param>
         </member>
         <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.DeletePackage(System.String,System.String)">
             <summary>
@@ -192,6 +211,14 @@
             <param name="roles">Roles to grant user.</param>
             <returns></returns>
         </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.UsersController.Post(System.String,NuGet.Lucene.Web.Models.UpdateUserAttributes)">
+            <summary>
+            Updates an existing user, optionally renaming.
+            </summary>
+            <param name="username"></param>
+            <param name="attributes"></param>
+            <returns></returns>
+        </member>
         <member name="M:NuGet.Lucene.Web.Controllers.UsersController.GetAuthenticationInfo">
             <summary>
             Retrieves information about the logged-in user
@@ -207,6 +234,11 @@
             not been authenticated, this method will force
             authentication to occur before retrieving
             information.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.UsersController.ChangeApiKey(NuGet.Lucene.Web.Models.KeyChangeRequest)">
+            <summary>
+            Changes the API key of the authenticated user.
             </summary>
         </member>
         <member name="M:NuGet.Lucene.Web.DataServices.PackageDataSource.OpportunisticallyPrefetchPackageFromOriginWhenNecessary">
