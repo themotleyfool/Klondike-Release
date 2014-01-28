@@ -4,6 +4,17 @@
         <name>NuGet.Lucene.Web</name>
     </assembly>
     <members>
+        <member name="T:NuGet.Lucene.Web.RedirectHandler">
+            <summary>
+            Sends a 307 Redirect to the given route with specified route values.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.RedirectHandler.AppendTrailingSlash">
+            <summary>
+            When true, append a trailing slash to the resolved URL if one
+            is not already present.
+            </summary>
+        </member>
         <member name="T:NuGet.Lucene.Web.Formatters.NuGetHtmlMicrodataFormatter">
             <summary>
             Extends <see cref="T:AspNet.WebApi.HtmlMicrodataFormatter.HtmlMicrodataFormatter"/> to include
@@ -54,6 +65,20 @@
             and the request has not already been authenticated, this module
             will authenticate the user as <c>"LocalAdministrator"</c>
             and grant all roles in <see cref="P:NuGet.Lucene.Web.RoleNames.All"/>.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Modules.RoleMappingAuthenticationModule">
+            <summary>
+            When <see cref="P:System.Web.HttpRequestBase.IsLocal"/> is true,
+            and the request has not already been authenticated, this module
+            will authenticate the user as <c>"LocalAdministrator"</c>
+            and grant all roles in <see cref="P:NuGet.Lucene.Web.RoleNames.All"/>.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.NuGetUserAgentConstraint">
+            <summary>
+            Constrains a route mapping to only match when the UserAgent product contains
+            <c>"NuGet"</c> (ignoring case).
             </summary>
         </member>
         <member name="T:NuGet.Lucene.Web.Controllers.NuGetDocumentationController">
@@ -206,10 +231,6 @@
             <summary>
             Creates or replaces a user.
             </summary>
-            <param name="username"></param>
-            <param name="key">API key to set for user (optional). If not specified, a GUID will be generated and used as the key.</param>
-            <param name="roles">Roles to grant user.</param>
-            <returns></returns>
         </member>
         <member name="M:NuGet.Lucene.Web.Controllers.UsersController.Post(System.String,NuGet.Lucene.Web.Models.UpdateUserAttributes)">
             <summary>
@@ -286,6 +307,25 @@
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:NuGet.Lucene.Web.MessageHandlers.CrossOriginMessageHandler" -->
+        <member name="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration)">
+            <summary>
+            See <see cref="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Adds route handlers that will redirect NuGet User Agents so that
+            a single source URL can be used in the client.
+            </summary>
+            <param name="config">
+            The configuration in which to register routes
+            </param>
+            <param name="routeTemplate">
+            Where the primary redirect should take place.
+            The empty string should be used in most cases, but if you want to
+            point your clients to http://foo/api you could use <c>"api"</c> instead.
+            </param>
+        </member>
         <member name="F:NuGet.Lucene.Web.RoleNames.AccountAdministrator">
             <summary>
             Allowed to create and delete accounts,
