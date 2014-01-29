@@ -31,6 +31,16 @@
             The new key to set. If blank, one wil be generated.
             </summary>
         </member>
+        <member name="M:NuGet.Lucene.Web.Models.MirroringPackageRepository.ShouldLookInOrigin(System.String,System.Collections.Generic.List{NuGet.IPackage})">
+            <summary>
+            Determines if origin should be checked for additional package versions.
+            The default implementation returns <c>true</c> if <paramref name="localPackages"/>
+            is empty or if any of the local packages are mirrored.
+            
+            An alternate implementation could use a whitelist or blacklist.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Key">
             <summary>
             API Key to be used by nuget to authenticate as this user.
