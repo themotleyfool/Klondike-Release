@@ -316,7 +316,13 @@
             hub to receive notification when status changes.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:NuGet.Lucene.Web.MessageHandlers.CrossOriginMessageHandler" -->
+        <member name="T:NuGet.Lucene.Web.MessageHandlers.CrossOriginMessageHandler">
+            <summary>
+            Adds support for OPTIONS requests and adds Cross-Origin Resource Sharing (CORS)
+            response headers.
+            TODO: evaluate replacement with http://aspnetwebstack.codeplex.com/wikipage?title=CORS%20support%20for%20ASP.NET%20Web%20API when it ships.
+            </summary>
+        </member>
         <member name="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration)">
             <summary>
             See <see cref="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration,System.String)"/>
