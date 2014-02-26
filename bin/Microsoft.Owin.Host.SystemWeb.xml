@@ -146,7 +146,9 @@
             </summary>
         </member>
         <member name="T:Microsoft.Owin.Host.SystemWeb.AuthenticationResult">
-            <summary></summary>
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:Microsoft.Owin.Host.SystemWeb.AuthenticationResult.#ctor(System.Security.Principal.IIdentity,System.Collections.Generic.IDictionary{System.String,System.String},System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary></summary>
@@ -177,35 +179,39 @@
             <returns>An instance of a data protection service</returns>
         </member>
         <member name="T:System.Web.HttpContextBaseExtensions">
-            <summary>Provides extension methods for <see cref="T:System.Web.HttpContextBase"/>.</summary>
+            <summary>
+            Provides extension methods for <see cref="T:System.Web.HttpContextBase"/>.
+            </summary>
         </member>
         <member name="M:System.Web.HttpContextBaseExtensions.GetOwinContext(System.Web.HttpContextBase)">
             <summary>
-            
+            Gets the <see cref="T:Microsoft.Owin.IOwinContext"/> for the current request.
             </summary>
             <param name="context"></param>
             <returns></returns>
         </member>
         <member name="M:System.Web.HttpContextBaseExtensions.GetOwinContext(System.Web.HttpRequestBase)">
             <summary>
-            
+            Gets the <see cref="T:Microsoft.Owin.IOwinContext"/> for the current request.
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
         <member name="T:System.Web.HttpContextExtensions">
-            <summary>Provides extension methods for <see cref="T:System.Web.HttpContext"/>.</summary>
+            <summary>
+            Provides extension methods for <see cref="T:System.Web.HttpContext"/>.
+            </summary>
         </member>
         <member name="M:System.Web.HttpContextExtensions.GetOwinContext(System.Web.HttpContext)">
             <summary>
-            
+            Gets the <see cref="T:Microsoft.Owin.IOwinContext"/> for the current request.
             </summary>
             <param name="context"></param>
             <returns></returns>
         </member>
         <member name="M:System.Web.HttpContextExtensions.GetOwinContext(System.Web.HttpRequest)">
             <summary>
-            
+            Gets the <see cref="T:Microsoft.Owin.IOwinContext"/> for the current request.
             </summary>
             <param name="request"></param>
             <returns></returns>

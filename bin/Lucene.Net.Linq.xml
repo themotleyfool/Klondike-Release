@@ -848,6 +848,13 @@
             parameter.
             </summary>
         </member>
+        <member name="M:Lucene.Net.Linq.Context.ReopenSearcher(Lucene.Net.Search.IndexSearcher@)">
+            <summary>
+            Reopen the <see cref="T:Lucene.Net.Index.IndexReader"/>. If the index has not changed,
+            return <c>false</c>. If the index has changed, set <paramref name="searcher"/>
+            with a new <see cref="T:Lucene.Net.Search.IndexSearcher"/> instance and return <c>true</c>.
+            </summary>
+        </member>
         <member name="M:Lucene.Net.Linq.RelinqQueryParserFactory.CreateExpressionTreeProcessor">
             <summary>
             Creates an <c cref="T:Remotion.Linq.Parsing.Structure.IExpressionTreeProcessor"/> that will execute

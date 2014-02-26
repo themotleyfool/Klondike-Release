@@ -91,9 +91,14 @@
             </summary>
             <param name="certificate">Client Certificate</param>
         </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.Connection.Microsoft#AspNet#SignalR#Client#IConnection#UpdateLastKeepAlive">
+        <member name="M:Microsoft.AspNet.SignalR.Client.Connection.Microsoft#AspNet#SignalR#Client#IConnection#MarkLastMessage">
             <summary>
-            Sets LastKeepAlive to the current time 
+            Sets LastMessageAt to the current time 
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Client.Connection.Microsoft#AspNet#SignalR#Client#IConnection#MarkActive">
+            <summary>
+            Sets LastActiveAt to the current time 
             </summary>
         </member>
         <member name="M:Microsoft.AspNet.SignalR.Client.Connection.Dispose">
@@ -148,9 +153,26 @@
             This value is modified by adding the server's TransportConnectTimeout configuration value.
             </summary>
         </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Connection.Microsoft#AspNet#SignalR#Client#IConnection#TotalTransportConnectTimeout">
+            <summary>
+            The amount of time a transport will wait (while connecting) before failing.
+            This is the total vaue obtained by adding the server's configuration value and the timeout specified by the user
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Connection.Microsoft#AspNet#SignalR#Client#IConnection#ReconnectWindow">
+            <summary>
+            The maximum amount of time a connection will allow to try and reconnect.
+            This value is equivalent to the summation of the servers disconnect and keep alive timeout values.
+            </summary>
+        </member>
         <member name="P:Microsoft.AspNet.SignalR.Client.Connection.Microsoft#AspNet#SignalR#Client#IConnection#KeepAliveData">
             <summary>
             Object to store the various keep alive timeout values
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Connection.Microsoft#AspNet#SignalR#Client#IConnection#LastMessageAt">
+            <summary>
+            The timestamp of the last message received by the connection.
             </summary>
         </member>
         <member name="P:Microsoft.AspNet.SignalR.Client.Connection.JsonSerializer">
@@ -223,12 +245,13 @@
             Default text writer
             </summary>
         </member>
-        <member name="M:Microsoft.AspNet.SignalR.Client.HeartbeatMonitor.#ctor(Microsoft.AspNet.SignalR.Client.IConnection,System.Object)">
+        <member name="M:Microsoft.AspNet.SignalR.Client.HeartbeatMonitor.#ctor(Microsoft.AspNet.SignalR.Client.IConnection,System.Object,System.TimeSpan)">
             <summary>
             Initializes a new instance of the HeartBeatMonitor Class 
             </summary>
             <param name="connection"></param>
             <param name="connectionStateLock"></param>
+            <param name="beatInterval">How often to check connection status</param>
         </member>
         <member name="M:Microsoft.AspNet.SignalR.Client.HeartbeatMonitor.Start">
             <summary>
@@ -753,7 +776,12 @@
         </member>
         <member name="P:Microsoft.AspNet.SignalR.Client.Resources.Error_DataCannotBeSentConnectionDisconnected">
             <summary>
-              Looks up a localized string similar to Data cannot be sent as connection is disconnected. Call start before sending any data..
+              Looks up a localized string similar to Data cannot be sent because the connection is in the disconnected state. Call start before sending any data..
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Client.Resources.Error_DataCannotBeSentDuringWebSocketReconnect">
+            <summary>
+              Looks up a localized string similar to Data cannot be sent because the WebSocket connection is reconnecting..
             </summary>
         </member>
         <member name="P:Microsoft.AspNet.SignalR.Client.Resources.Error_IncompatibleProtocolVersion">

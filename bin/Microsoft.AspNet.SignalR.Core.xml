@@ -53,6 +53,11 @@
             Gets a cancellation token that represents the client's lifetime.
             </summary>
         </member>
+        <member name="P:Microsoft.AspNet.SignalR.Hosting.IResponse.StatusCode">
+            <summary>
+            Gets or sets the status code of the response.
+            </summary>
+        </member>
         <member name="P:Microsoft.AspNet.SignalR.Hosting.IResponse.ContentType">
             <summary>
             Gets or sets the content type of the response.
@@ -2596,7 +2601,12 @@
               Looks up a localized string similar to Do not read RequireOutgoing. Use protected _requireOutgoing instead..
             </summary>
         </member>
-        <member name="P:Microsoft.AspNet.SignalR.Resources.Error_DuplicateHubs">
+        <member name="P:Microsoft.AspNet.SignalR.Resources.Error_DuplicateHubNames">
+            <summary>
+              Looks up a localized string similar to Two Hubs must not share the same name. &apos;{0}&apos; and &apos;{1}&apos; both share the name &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Resources.Error_DuplicateHubNamesInConnectionData">
             <summary>
               Looks up a localized string similar to Duplicate Hub names found..
             </summary>
@@ -2745,6 +2755,16 @@
             <summary>
               Looks up a localized string similar to Forbidden: JSONP is disabled..
             </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Resources.Warning_AssemblyGetTypesException">
+             <summary>
+               Looks up a localized string similar to None of the classes from assembly &quot;{0}&quot; could be loaded when searching for Hubs. [{1}]
+            
+            Original exception type: {2}
+            Original exception message: {3}
+            
+            .
+             </summary>
         </member>
         <member name="T:Microsoft.AspNet.SignalR.Transports.ITrackingConnection">
             <summary>
