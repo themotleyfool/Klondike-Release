@@ -4,6 +4,16 @@
         <name>NuGet.Lucene.Web</name>
     </assembly>
     <members>
+        <member name="T:NuGet.Lucene.Web.Controllers.SourceFilesController">
+            <summary>
+            Provides source files to a debugger.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Controllers.SymbolsController">
+            <summary>
+            Provides PDB debugging symbol files to a debugger.
+            </summary>
+        </member>
         <member name="T:NuGet.Lucene.Web.RedirectHandler">
             <summary>
             Sends a 307 Redirect to the given route with specified route values.
@@ -365,6 +375,45 @@
             <summary>
             Uses default contract resolver for types in the SignalR assembly
             and camel case for all other types.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Symbols.SymbolSourceMapper.FindSourceFile(System.String,System.Collections.Generic.ISet{System.String})">
+            <summary>
+            Finds a source file in the symbol package that matches the referenced source file from a PDB.
+            </summary>
+            <param name="referencedSource">
+            A full path to a source file referenced from a PDB.
+            </param>
+            <param name="sourceFiles">
+            A list of source files that were included in the symbol package,
+            relative to the <c>"src"</c> directory in the package.
+            </param>
+            <returns>
+            Path to the file, relative to the <c>"src"</c> directory, or <c>string.Empty</c>
+            if no match is found.
+            </returns>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Symbols.SymbolTools">
+            <summary>
+            Helper to execute Debugging Tools for Windows utilities to update source file paths
+            and index symbol files.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Symbols.SymbolTools.GetSources(System.String)">
+            <summary>
+            Get a list of source files referenced by a PDB symbol file using srctool.exe
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Symbols.SymbolTools.MapSourcesAsync(System.String,System.String)">
+            <summary>
+            Uses pdbstr.exe to add a <c>srcsrv</c> stream to a PDB symbol file
+            that maps source files to an HTTP server.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Symbols.SymbolTools.IndexSymbolFile(NuGet.IPackageName,System.String)">
+            <summary>
+            Uses symstore.exe to copy a PDB symbol file to a location
+            where debuggers will attempt to load it from.
             </summary>
         </member>
         <member name="M:NuGet.Lucene.Web.Util.TaskUtils.FireAndForget(System.Func{System.Threading.Tasks.Task},System.Action{System.Exception})">
