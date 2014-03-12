@@ -5,12 +5,12 @@
         <link rel="stylesheet" href="styles/6b4e39df.main.css"/>
     </head>
     <body>
-        <script src="js/e27b6834.bundle.js"></script>
+        <script src="js/4ce1b01c.bundle.js"></script>
 
         <script>
             //Ember.ENV.LOG_MODULE_RESOLVER = true;
             window.App = require('app')['default'].create();
-            window.App.version = "1.5.0 (9916342)";
+            window.App.version = "1.5.1 (251a9e8)";
             console.log("Klondike Version ", window.App.version);
         </script>
 
@@ -31,6 +31,7 @@
                     <nav>
                         {{#link-to 'index'}}Home{{/link-to}}
                         {{#link-to 'packages.list'}}Packages{{/link-to}}
+                        {{#link-to 'symbols'}}Symbols{{/link-to}}
                         {{#link-to 'admin' rel="nofollow"}}Admin{{/link-to}}
                         <a {{bind-attr href=apiUrl}}>Api</a>
                     </nav>
