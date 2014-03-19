@@ -159,6 +159,13 @@
             </summary>
             <returns><c>200 OK</c></returns>
         </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.IndexingController.Optimize">
+            <summary>
+            Requests that the Lucene index be optimized, forcing all segments
+            to be merged and expunging deleted documents.
+            </summary>
+            <returns><c>200 OK</c></returns>
+        </member>
         <member name="T:NuGet.Lucene.Web.Controllers.PackagesController">
             <summary>
             Provides methods to search, get metadata, download, upload and delete packages.

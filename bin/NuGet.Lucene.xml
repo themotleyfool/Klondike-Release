@@ -130,6 +130,12 @@
             using parameter object for better flexibility.
             </summary>
         </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.Optimize">
+            <summary>
+            Requests that the Lucene index be optimized, forcing all segments
+            to be merged and expunging deleted documents.
+            </summary>
+        </member>
         <member name="P:NuGet.Lucene.ILucenePackageRepository.LucenePackages">
             <summary>
             Provides access to more strongly typed packages to facilitate
