@@ -4,6 +4,18 @@
         <name>NuGet.Lucene.Web</name>
     </assembly>
     <members>
+        <member name="T:NuGet.Lucene.Web.Controllers.PackagesODataController">
+            <summary>
+            OData provider for Lucene based NuGet package repository.
+            This is the primary interface for the NuGet Command Line client,
+            Visual Studio Package Manager and Package Manager Console.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesODataController.OkCount(System.Int32)">
+            <summary>
+            Creates a text/plain response that contains a count of items.
+            </summary>
+        </member>
         <member name="T:NuGet.Lucene.Web.Controllers.SourceFilesController">
             <summary>
             Provides source files to a debugger.
@@ -14,15 +26,13 @@
             Provides PDB debugging symbol files to a debugger.
             </summary>
         </member>
-        <member name="T:NuGet.Lucene.Web.RedirectHandler">
+        <member name="T:NuGet.Lucene.Web.Formatters.MalformedMultipartFixingStream">
             <summary>
-            Sends a 307 Redirect to the given route with specified route values.
-            </summary>
-        </member>
-        <member name="P:NuGet.Lucene.Web.RedirectHandler.AppendTrailingSlash">
-            <summary>
-            When true, append a trailing slash to the resolved URL if one
-            is not already present.
+            NuGet client (as of 2.8.2) uses wrong newline character before closing
+            multi-part boundary when running on mono and <see cref="P:System.Environment.NewLine"/>
+            is <c>\n</c>. It should always use <c>\r\n</c> but does not.
+            
+            This stream decorator fixes these boundaries to be correct.
             </summary>
         </member>
         <member name="T:NuGet.Lucene.Web.Formatters.NuGetHtmlMicrodataFormatter">
@@ -42,14 +52,13 @@
             </summary>
         </member>
         <member name="M:NuGet.Lucene.Web.Models.MirroringPackageRepository.ShouldLookInOrigin(System.String,System.Collections.Generic.List{NuGet.IPackage})">
-            <summary>
-            Determines if origin should be checked for additional package versions.
-            The default implementation returns <c>true</c> if <paramref name="localPackages"/>
-            is empty or if any of the local packages are mirrored.
+             <summary>
+             Determines if origin should be checked for additional package versions.
+             The default implementation returns <c>true</c> if <paramref name="localPackages"/>
+             is empty or if any of the local packages are mirrored.
             
-            An alternate implementation could use a whitelist or blacklist.
-            </summary>
-            <returns></returns>
+             An alternate implementation could use a whitelist or blacklist.
+             </summary>
         </member>
         <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Key">
             <summary>
@@ -72,26 +81,17 @@
             When set, requests that a user is renamed to this value.
             </summary>
         </member>
-        <member name="T:NuGet.Lucene.Web.Modules.AnonymousPackageManagerModule">
+        <member name="T:NuGet.Lucene.Web.Middleware.AnonymousPackageManagerMiddleware">
             <summary>
             When the request has not already been authenticated, this
             module will authenticate the user and grant the
             <see cref="F:NuGet.Lucene.Web.RoleNames.PackageManager"/> role.
             </summary>
         </member>
-        <member name="T:NuGet.Lucene.Web.Modules.LocalRequestAuthenticationModule">
+        <member name="T:NuGet.Lucene.Web.Middleware.LocalRequestAuthenticationMiddleware">
             <summary>
-            When <see cref="P:System.Web.HttpRequestBase.IsLocal"/> is true,
-            and the request has not already been authenticated, this module
-            will authenticate the user as <c>"LocalAdministrator"</c>
-            and grant all roles in <see cref="P:NuGet.Lucene.Web.RoleNames.All"/>.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.Modules.RoleMappingAuthenticationModule">
-            <summary>
-            When <see cref="P:System.Web.HttpRequestBase.IsLocal"/> is true,
-            and the request has not already been authenticated, this module
-            will authenticate the user as <c>"LocalAdministrator"</c>
+            When request originates from a local network address,
+            authenticate the user as <c>"LocalAdministrator"</c>
             and grant all roles in <see cref="P:NuGet.Lucene.Web.RoleNames.All"/>.
             </summary>
         </member>
@@ -100,6 +100,12 @@
             Constrains a route mapping to only match when the UserAgent product contains
             <c>"NuGet"</c> (ignoring case).
             </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Authentication.IApiKeyAuthentication.AuthenticateRequest(Microsoft.Owin.IOwinRequest)">
+            <summary>
+            Authenticate a request using the <c>X-NuGet-ApiKey</c> request header.
+            </summary>
+            <throws><see cref="T:System.Security.Authentication.AuthenticationException"/> when the key is specified but not valid.</throws>
         </member>
         <member name="T:NuGet.Lucene.Web.Controllers.NuGetDocumentationController">
             <summary>
@@ -138,7 +144,7 @@
             such as total number of packages in the repository.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.Web.Controllers.IndexingController.Synchronize">
+        <member name="M:NuGet.Lucene.Web.Controllers.IndexingController.Synchronize(NuGet.Lucene.Web.Models.SynchronizationOptions)">
             <summary>
             Starts a new synchronization process if one is not already running.
             This method will return immediately instead of waiting for the
@@ -185,7 +191,7 @@
             package content.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.Search(System.String,System.Boolean,System.Int32,System.Int32,NuGet.Lucene.PackageOriginFilter,NuGet.Lucene.SearchSortField,NuGet.Lucene.SearchSortDirection)">
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.Search(System.String,System.Boolean,System.Boolean,System.Int32,System.Int32,NuGet.Lucene.PackageOriginFilter,NuGet.Lucene.SearchSortField,NuGet.Lucene.SearchSortDirection)">
             <summary>
             Searches for packages that match <paramref name="query"/>, or if no query
             is provided, returns all packages in the repository.
@@ -194,11 +200,17 @@
             wildcard or phrase queries.
             </param>
             <param name="includePrerelease">Specify <c>true</c> to look for pre-release packages.</param>
+            <param name="latestOnly">Specify <c>true</c> to only search most recent package version or <c>false</c> to search all versions</param>
             <param name="offset">Number of results to skip, for pagination.</param>
             <param name="count">Number of results to return, for pagination.</param>
             <param name="originFilter">Limit result to mirrored or local packages, or both.</param>
             <param name="sort">Specify field to sort results on. Score (relevance) is default.</param>
             <param name="order">Sort order (default:ascending or descending)</param>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.GetAvailableSearchFieldNames">
+            <summary>
+            Gets a list of fields that can be searched using the advanced search function.
+            </summary>
         </member>
         <member name="M:NuGet.Lucene.Web.Controllers.PackagesController.DeletePackage(System.String,System.String)">
             <summary>
@@ -289,48 +301,17 @@
             Changes the API key of the authenticated user.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.Web.DataServices.PackageDataSource.OpportunisticallyPrefetchPackageFromOriginWhenNecessary">
+        <member name="M:NuGet.Lucene.Web.Formatters.MultipartFormDataMediaFormatter`2.ParseContentType(System.Net.Http.HttpContent)">
             <summary>
-            When (a) the client is looking for a particular package version, and
-            (b) package mirroring is enabled, and (c) the package is not in the
-            local repository, mirror it before the query is executed.
-            
-            This method enables automatic mirroring of packages during a package
-            restore with nuget client version 2.7.
+            Manually parse malformed content header that does not quote boundary parameter value.
+            Fixes bug on mono where <see cref="P:System.Net.Http.Headers.HttpContentHeaders.ContentType"/> is null when
+            boundary parameter is not quoted.
             </summary>
         </member>
-        <member name="T:NuGet.Lucene.Web.DataServices.PackageDataService">
+        <member name="M:NuGet.Lucene.Web.Formatters.MultipartFormDataMediaFormatter`2.FixIncompleteMultipartContent(System.Net.Http.HttpContent)">
             <summary>
-            WCF Data Services / OData provider for Lucene based NuGet package repository.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.DataServices.HttpContextWrapperWithRequest">
-            <summary>
-            Allow HttpContext.Request to be replaced with an arbitrary HttpRequestBase instance.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.DataServices.EmptyInputStreamHttpRequestWrapper">
-            <summary>
-            Prevents "System.Web.HttpException (0x80004005): This method or property is not
-            supported after HttpRequest.GetBufferlessInputStream has been invoked." from being
-            thrown at System.Web.HttpRequest.get_InputStream().
-            </summary>
-        </member>
-        <member name="M:NuGet.Lucene.Web.Formatters.MultipartFormDataMediaFormatter`1.FixIncompleteMultipartContent(System.Net.Http.HttpContent)">
-            <summary>
-            The NuGet client does not include a new line after the final boundary marker
-            which causes <see cref="M:System.Net.Http.HttpContentMultipartExtensions.ReadAsMultipartAsync(System.Net.Http.HttpContent)"/>
-            to throw <see cref="T:System.IO.IOException"/> "Unexpected end of MIME multipart stream.
-            MIME multipart message is not complete."
-            
-            This method appends a newline to the request body when missing.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.Hubs.StatusHub">
-            <summary>
-            Provides SignalR powered updates as indexing activity changes.
-            Clients can implement the <c>updateStatus</c> method on the <c>status</c>
-            hub to receive notification when status changes.
+            Fixes the following non-compliant issues with nuget client (as of 2.8.2):
+             * Ensure eol style is CRLF at ending boundary marker
             </summary>
         </member>
         <member name="T:NuGet.Lucene.Web.MessageHandlers.CrossOriginMessageHandler">
@@ -340,12 +321,41 @@
             TODO: evaluate replacement with http://aspnetwebstack.codeplex.com/wikipage?title=CORS%20support%20for%20ASP.NET%20Web%20API when it ships.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration)">
+        <member name="T:NuGet.Lucene.Web.RedirectHandler">
             <summary>
-            See <see cref="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration,System.String)"/>
+            Sends a 307 Redirect to the given route with specified route values.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration,System.String)">
+        <member name="M:NuGet.Lucene.Web.OData.Batch.HeaderCascadingODataBatchHandler.CopyRequestHeaders(System.Net.Http.HttpRequestMessage,System.Collections.Generic.IList{System.Web.Http.OData.Batch.ODataBatchRequestItem})">
+            <summary>
+            Copies HTTP Request Headers from parent request to all requests from multi-part child requests.
+            This fixes a problem where content negotiation does not work correctly and JSON is always returned
+            even when the client expects xml+atom.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.OData.Routing.Conventions.CompositeKeyRoutingConvention">
+            <summary>
+            Enables OData entities to be retrieved by URIs that use composite keys
+            as in <c>~/odata/Packages(Id='Foo',Version='1.0')</c>.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.OData.Routing.Conventions.ControllerAliasingODataRoutingConvention">
+            <summary>
+            Decorates an <see cref="T:System.Web.Http.OData.Routing.Conventions.IODataRoutingConvention"/> to use a controller name
+            that is different from the default convention.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.OData.Routing.Conventions.EntitySetCountRoutingConvention">
+            <summary>
+            Adds support for $count operation on entity sets when controller has a <c>GetCount</c> action.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.OData.Routing.Conventions.NonBindableActionCountRoutingConvention">
+            <summary>
+            Adds support for $count operation on non-bindable actions when controller has a <c>"Count" + ActionName</c> action.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.NuGetWebApiRouteMapper.MapNuGetClientRedirectRoutes(System.Web.Http.HttpConfiguration)">
             <summary>
             Adds route handlers that will redirect NuGet User Agents so that
             a single source URL can be used in the client.
@@ -353,11 +363,11 @@
             <param name="config">
             The configuration in which to register routes
             </param>
-            <param name="routeTemplate">
-            Where the primary redirect should take place.
-            The empty string should be used in most cases, but if you want to
-            point your clients to http://foo/api you could use <c>"api"</c> instead.
-            </param>
+        </member>
+        <member name="T:NuGet.Lucene.Web.NuGetWebApiRouteMapper.BatchHttpServer">
+            <summary>
+            See https://trocolate.wordpress.com/2012/07/19/mitigate-issue-260-in-batching-scenario/
+            </summary>
         </member>
         <member name="F:NuGet.Lucene.Web.RoleNames.AccountAdministrator">
             <summary>
@@ -378,11 +388,32 @@
             Array of all roles used by NuGet.Lucene.Web.
             </summary>
         </member>
-        <member name="T:NuGet.Lucene.Web.SelectiveCamelCaseContractResolver">
+        <member name="T:NuGet.Lucene.Web.SignalR.Hubs.StatusHub">
+            <summary>
+            Provides SignalR powered updates as indexing activity changes.
+            Clients can implement the <c>updateStatus</c> method on the <c>status</c>
+            hub to receive notification when status changes.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.SignalR.SelectiveCamelCaseContractResolver">
             <summary>
             Uses default contract resolver for types in the SignalR assembly
             and camel case for all other types.
             </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Symbols.SymbolSource.GetUnzippedPackagePath(NuGet.IPackageName)">
+            <summary>
+            Returns the path a package should be decompressed to
+            </summary>
+            <param name="package"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Symbols.SymbolSource.CreateTempFolderForPackage(NuGet.IPackageName)">
+            <summary>
+            Creates a temp directory that gets deleted when the returned object is disposed
+            </summary>
+            <param name="package"></param>
+            <returns>An IDisposable that deletes the folder when disposed</returns>
         </member>
         <member name="M:NuGet.Lucene.Web.Symbols.SymbolSourceMapper.FindSourceFile(System.String,System.Collections.Generic.ISet{System.String})">
             <summary>
@@ -423,31 +454,23 @@
             where debuggers will attempt to load it from.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.Web.Util.TaskUtils.FireAndForget(System.Func{System.Threading.Tasks.Task},System.Action{System.Exception})">
+        <member name="M:NuGet.Lucene.Web.Util.ITaskRunner.QueueBackgroundWorkItem(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+            <summary>
+            This method enables a Task to be started from asp.net 4.5 without requiring an async method to await it.
+            When not running in asp.net, falls back to <see cref="M:System.Threading.Tasks.Task.Run(System.Action)"/>.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Util.TaskRunner.QueueBackgroundWorkItem(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task})">
             <summary>
             This method enables a Task to be started from asp.net 4.5 without requiring an async method to await it.
             </summary>
-            <remarks>
-                When executing an async method in asp.net 4.5 associated with a request and failing to wait for the task
-                to complete will result in an exception like the following to be thrown.
-                <code>
-                    System.AggregateException: A Task's exception(s) were not observed either by Waiting on the Task
-                    or accessing its Exception property. As a result, the unobserved exception was rethrown by the
-                    finalizer thread. ---> System.NullReferenceException: Object reference not set to an instance of an object.
-                       at System.Web.ThreadContext.AssociateWithCurrentThread(Boolean setImpersonationContext)
-                       at System.Web.HttpApplication.OnThreadEnterPrivate(Boolean setImpersonationContext)
-                       at System.Web.HttpApplication.System.Web.Util.ISyncContext.Enter()
-                       at System.Web.Util.SynchronizationHelper.SafeWrapCallback(Action action)
-                       at System.Threading.Tasks.Task.Execute()
-                       --- End of inner exception stack trace ---
-                    ---> (Inner Exception #0) System.NullReferenceException: Object reference not set to an instance of an object.
-                       at System.Web.ThreadContext.AssociateWithCurrentThread(Boolean setImpersonationContext)
-                       at System.Web.HttpApplication.OnThreadEnterPrivate(Boolean setImpersonationContext)
-                       at System.Web.HttpApplication.System.Web.Util.ISyncContext.Enter()
-                       at System.Web.Util.SynchronizationHelper.SafeWrapCallback(Action action)
-                       at System.Threading.Tasks.Task.Execute()
-                </code>
-            </remarks>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Util.TaskRunner.QueueuHostedTask(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+            <summary>
+            Uses reflection to invoke HostingEnvironment.QueueBackgroundWorkItem when
+            running on ASP.NET 4.5.2 or later or falls back to ThreadPool.QueueUserWorkItem
+            on older runtimes.
+            </summary>
         </member>
     </members>
 </doc>

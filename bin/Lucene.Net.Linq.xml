@@ -99,6 +99,13 @@
             <param name="fieldName">field name requiring a non-default analyzer as a member expression</param>
             <param name="analyzer">non-default analyzer to use for field</param>
         </member>
+        <member name="P:Lucene.Net.Linq.FieldMappingQueryParser`1.DefaultSearchProperty">
+            <summary>
+            Sets the default property for queries that don't specify which field to search.
+            For an example query like <c>Lucene OR NuGet</c>, if this property is set to <c>SearchText</c>,
+            it will produce a query like <c>SearchText:Lucene OR SearchText:NuGet</c>.
+            </summary>
+        </member>
         <member name="T:Lucene.Net.Linq.Fluent.ClassMap`1">
             <summary>
             A fluent interface for specifying how a class is mapped to Lucene
@@ -124,6 +131,11 @@
             in an Index. May be specified for multiple properties to create
             a composite key, and may also be specified in addition to using
             <see cref="M:Lucene.Net.Linq.Fluent.ClassMap`1.DocumentKey(System.String)"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Fluent.ClassMap`1.DocumentBoost(System.Linq.Expressions.Expression{System.Func{`0,System.Single}})">
+            <summary>
+            Defines a property that is used to set the document boost.
             </summary>
         </member>
         <member name="M:Lucene.Net.Linq.Fluent.ClassMap`1.Score(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
@@ -180,7 +192,9 @@
         <member name="M:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.GetMappingInfo(System.String)">
             <summary>
             Returns detailed mapping info for a given property name.
+            DefaultSearchProperty names are case sensitive.
             </summary>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">if the property name is not found.</exception>
         </member>
         <member name="M:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.CreateMultiFieldQuery(System.String)">
             <summary>
@@ -197,6 +211,11 @@
             <summary>
             Returns the set of property names used to compose
             a <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> for the document.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.IndexedProperties">
+            <summary>
+            Returns the set of fields defined for the given document.
             </summary>
         </member>
         <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToObject(Lucene.Net.Documents.Document,Lucene.Net.Linq.IQueryExecutionContext,`0)">
@@ -474,6 +493,40 @@
             specific criteria defined by <see cref="!:IFieldMappingInfo.KeyConstraint"/>
             </summary>
         </member>
+        <member name="T:Lucene.Net.Linq.KeyConstraint">
+            <summary>
+            Used in conjunction with <see cref="M:Lucene.Net.Linq.ISession`1.Add(Lucene.Net.Linq.KeyConstraint,`0[])"/>.
+            </summary>
+        </member>
+        <member name="F:Lucene.Net.Linq.KeyConstraint.None">
+             <summary>
+             EXPERT: this constraint may be used by clients when the client
+             knows that there is definitely not a document with the same key
+             already present in the index.
+            
+             When <see cref="M:Lucene.Net.Linq.ISession`1.Commit"/> is invoked, normally any
+             pending updates and additions are preceding by deleting existing
+             documents with the same <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> to ensure
+             that the key is unique.
+            
+             This option is provided to improve performance by avoiding
+             the delete-by-query step in the commit process.
+            
+             If this option is used incorrectly, the index may be left in
+             an undesirable state where multiple documents have the same
+             key. It should be used with caution.
+             </summary>
+        </member>
+        <member name="F:Lucene.Net.Linq.KeyConstraint.Unique">
+             <summary>
+             The default add behavior of the session <see cref="M:Lucene.Net.Linq.ISession`1.Add(`0[])"/>. Using this value
+             on <see cref="M:Lucene.Net.Linq.ISession`1.Add(Lucene.Net.Linq.KeyConstraint,`0[])"/> has the same result of <see cref="M:Lucene.Net.Linq.ISession`1.Add(`0[])"/>.
+            
+             In this mode, invoking <see cref="M:Lucene.Net.Linq.ISession`1.Commit"/> will execute
+             a delete query for each unique <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> that
+             corresponds to an updated or added item.
+             </summary>
+        </member>
         <member name="T:Lucene.Net.Linq.LuceneDataProviderSettings">
             <summary>
             Holds configuration settings that specify how the library behaves.
@@ -498,6 +551,91 @@
             <para>
             Default: <c>true</c>
             </para>
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProviderSettings.DeletionPolicy">
+            <summary>
+            Specifies the <see cref="T:Lucene.Net.Index.IndexDeletionPolicy"/> of the <see cref="T:Lucene.Net.Index.IndexWriter"/>.
+            Default: <see cref="T:Lucene.Net.Index.KeepOnlyLastCommitDeletionPolicy"/>.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProviderSettings.MaxFieldLength">
+            <summary>
+            Specifies the <see cref="T:Lucene.Net.Index.IndexWriter.MaxFieldLength"/> of the <see cref="T:Lucene.Net.Index.IndexWriter"/>.
+            Default: <see cref="F:Lucene.Net.Index.IndexWriter.MaxFieldLength.UNLIMITED"/>.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProviderSettings.MergeFactor">
+            <summary>
+            Specifies the merge factor when using <see cref="T:Lucene.Net.Index.LogMergePolicy"/> or subclass.
+            Default: 10 (from <see cref="F:Lucene.Net.Index.LogMergePolicy.DEFAULT_MERGE_FACTOR"/>.
+            </summary>
+            <seealso cref="P:Lucene.Net.Index.IndexWriter.MergeFactor"/>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProviderSettings.RAMBufferSizeMB">
+            <summary>
+            Specifies the RAM buffer size of the <see cref="T:Lucene.Net.Index.IndexWriter"/> in megabytes.
+            Default: 16.0 (from <see cref="F:Lucene.Net.Index.IndexWriter.DEFAULT_RAM_BUFFER_SIZE_MB"/>.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProviderSettings.MergePolicyBuilder">
+            <summary>
+            A function that creates a <see cref="T:Lucene.Net.Index.MergePolicy"/> for use with a <see cref="T:Lucene.Net.Index.IndexWriter"/>.
+            Default: <c>null</c>, which causes <see cref="T:Lucene.Net.Index.IndexWriter"/> to use <see cref="T:Lucene.Net.Index.LogByteSizeMergePolicy"/>.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Linq.LuceneQueryStatistics">
+            <summary>
+            Provides access to statistics about queries via <see cref="M:Lucene.Net.Linq.LuceneMethods.CaptureStatistics``1(System.Linq.IQueryable{``0},System.Action{Lucene.Net.Linq.LuceneQueryStatistics})"/>.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.Query">
+            <summary>
+            The Query (generally a complex <see cref="T:Lucene.Net.Search.BooleanQuery"/> or <see cref="T:Lucene.Net.Search.MatchAllDocsQuery"/>)
+            that was executed on <see cref="M:Lucene.Net.Search.Searcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort)"/>
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.Filter">
+            <summary>
+            The Filter (null when <see cref="P:Lucene.Net.Linq.LuceneDataProviderSettings.EnableMultipleEntities"/> is false)
+            that was executed on <see cref="M:Lucene.Net.Search.Searcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort)"/>
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.Sort">
+            <summary>
+            The Sort that was executed on <see cref="M:Lucene.Net.Search.Searcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort)"/>
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.ElapsedPreparationTime">
+            <summary>
+            Returns the total amount of time taken to translate the LINQ expression tree into a Lucene Query.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.ElapsedSearchTime">
+            <summary>
+            Returns the total amount of time spent in <see cref="M:Lucene.Net.Search.Searcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort)"/>
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.ElapsedRetrievalTime">
+            <summary>
+            Returns the total amount of time spent converting <see cref="T:Lucene.Net.Documents.Document"/> and enumerating projected results.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.TotalHits">
+            <summary>
+            Returns the total hits that matched the query, including items that were not enumerated
+            due to <c>Skip</c> and <c>Take</c>.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.SkippedHits">
+            <summary>
+            Returns the number of hits that were skipped by <see cref="M:System.Linq.Enumerable.Skip``1(System.Collections.Generic.IEnumerable{``0},System.Int32)"/>
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneQueryStatistics.RetrievedDocuments">
+            <summary>
+            Returns the number of hits that were retrieved. This will generally be the lesser
+            of total hits or limit imposed by <see cref="M:System.Linq.Enumerable.Take``1(System.Collections.Generic.IEnumerable{``0},System.Int32)"/>.
             </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Mapping.IDocumentKey">
@@ -596,7 +734,7 @@
         </member>
         <member name="M:Lucene.Net.Linq.Mapping.IFieldMapper`1.CopyToDocument(`0,Lucene.Net.Documents.Document)">
             <summary>
-            Convert a Property or other data on an instance
+            Convert a DefaultSearchProperty or other data on an instance
             of <paramref name="source"/> into a <see cref="T:Lucene.Net.Documents.Field"/>
             on the <paramref name="target"/>.
             </summary>
@@ -613,6 +751,11 @@
             <summary>
             Gets the Analyzer to be used for indexing this field
             or parsing queries on this field.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMapper`1.IndexMode">
+            <summary>
+            Gets the index mode for the field.
             </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Mapping.IDocumentFieldConverter">
@@ -708,6 +851,16 @@
             the <paramref name="transactionLock"/> will be used to coordinate writes.
             </summary>
         </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.CreateQueryParser``1">
+             <summary>
+             Create a <see cref="T:Lucene.Net.QueryParsers.QueryParser"/> suitable for parsing advanced queries
+             that cannot not expressed as LINQ (e.g. queries submitted by a user).
+            
+             After the instance is returned, options such as <see cref="P:Lucene.Net.QueryParsers.QueryParser.AllowLeadingWildcard"/>
+             and <see cref="P:Lucene.Net.QueryParsers.QueryParser.Field"/> can be customized to the clients needs.
+             </summary>
+             <typeparam name="T">The type of document that queries will be built against.</typeparam>
+        </member>
         <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1">
             <summary>
             <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
@@ -741,6 +894,13 @@
             <typeparam name="T">The type of object that Document will be mapped onto.</typeparam>
             <param name="lookup">Factory method to instantiate new instances of T.</param>
             <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.GetIndexedPropertyNames``1">
+            <summary>
+            Returns an enumeration of fields names that are indexed for a given object.
+            This may be useful in conjunction with <see cref="M:Lucene.Net.Linq.LuceneDataProvider.CreateQueryParser``1"/> to
+            allow users to specify advanced custom queries.
+            </summary>
         </member>
         <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1">
             <summary>
@@ -823,20 +983,25 @@
             </summary>
         </member>
         <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            Registers a callback to be invoked when a new IndexSearcher is being initialized.
-            This method allows an IndexSearcher to be "warmed up" by executing one or more
-            queries before the instance becomes visible on other threads.
+             <summary>
+             Registers a callback to be invoked when a new IndexSearcher is being initialized.
+             This method allows an IndexSearcher to be "warmed up" by executing one or more
+             queries before the instance becomes visible on other threads.
             
-            While callbacks are being executed, other threads will continue to use the previous
-            instance of IndexSearcher if this is not the first instance being initialized.
+             While callbacks are being executed, other threads will continue to use the previous
+             instance of IndexSearcher if this is not the first instance being initialized.
             
-            If this is the first instance, other threads will block until all callbacks complete.
-            </summary>
+             If this is the first instance, other threads will block until all callbacks complete.
+             </summary>
         </member>
         <member name="P:Lucene.Net.Linq.LuceneDataProvider.Settings">
             <summary>
             Settings that enable or disable optional behavior.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProvider.LuceneVersion">
+            <summary>
+            Gets the index format version provided by constructor.
             </summary>
         </member>
         <member name="P:Lucene.Net.Linq.LuceneDataProvider.IndexWriter">
@@ -862,6 +1027,14 @@
             before executing <c cref="T:Remotion.Linq.Parsing.Structure.ExpressionTreeProcessors.PartialEvaluatingExpressionTreeProcessor"/>
             and other default processors. 
             </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.ISession`1.Add(Lucene.Net.Linq.KeyConstraint,`0[])">
+            <summary>
+            Add items to the index allowing for specific key constraint behavior
+            </summary>
+            <param name="constraint"><see cref="F:Lucene.Net.Linq.KeyConstraint.Unique"/> is the default behavior, <see cref="F:Lucene.Net.Linq.KeyConstraint.None"/> will
+            not perform a delete operation to ensure uniqueness</param>
+            <param name="items"></param>
         </member>
         <member name="T:Lucene.Net.Linq.ObjectFactory`1">
             <summary>
@@ -910,6 +1083,18 @@
             Applies a custom boost function to customize query scoring. When multiple boost functions
             are added by calling this method more than once, the return values from each function are
             multiplied to yield a final result.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.Fuzzy(System.Boolean,System.Single)">
+            <summary>
+            Enables fuzzy matching on the preceeding query clause so that similar but not identical
+            terms are matched.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.CaptureStatistics``1(System.Linq.IQueryable{``0},System.Action{Lucene.Net.Linq.LuceneQueryStatistics})">
+            <summary>
+            Registers a callback to be invoked when the query is executed to provide access to
+            metadata including total hits and execution time.
             </summary>
         </member>
         <member name="M:Lucene.Net.Linq.LuceneMethods.Where``1(System.Linq.IQueryable{``0},Lucene.Net.Search.Query)">
@@ -1120,6 +1305,12 @@
             <summary>
             When set on a property, the property will be set with the score (relevance)
             of the document based on the queries and boost settings.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Linq.Mapping.DocumentBoostAttribute">
+            <summary>
+            When set on a property, the document boost will be set with the property
+            value
             </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Mapping.DocumentKeyAttribute">

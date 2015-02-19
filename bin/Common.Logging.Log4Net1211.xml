@@ -4,17 +4,6 @@
         <name>Common.Logging.Log4Net1211</name>
     </assembly>
     <members>
-        <member name="T:AssemblyDoc">
-            <summary>
-            <para>This assembly contains the adapter to the log4net 1.2.9-1.2.11 library</para>
-            <para>For an example on how to configure
-            <list type="bullet">
-            <item>Common.Logging to render its output to log4net, see <see cref="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter"/>.</item>
-            <item>log4net to render its output to Common.Logging use <see cref="T:Common.Logging.Log4Net.CommonLoggingAppender"/>.</item>
-            </list>
-            </para>
-            </summary>
-        </member>
         <member name="T:Common.Logging.Log4Net.CommonLoggingAppender">
             <summary>
             Routes log events to Common.Logging infrastructure.
@@ -204,13 +193,19 @@
             <author>Gilles Bayon</author>
             <author>Erich Eichinger</author>
         </member>
-        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(System.Collections.Specialized.NameValueCollection)">
+        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(Common.Logging.Configuration.NameValueCollection)">
             <summary>
             Constructor
             </summary>
             <param name="properties">configuration properties, see <see cref="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter"/> for more.</param>
         </member>
-        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(System.Collections.Specialized.NameValueCollection,Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.ILog4NetRuntime)">
+        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Constructor for binary backwards compatibility with non-portableversions
+            </summary>
+            <param name="properties">The properties.</param>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(Common.Logging.Configuration.NameValueCollection,Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.ILog4NetRuntime)">
             <summary>
             Constructor accepting configuration properties and an arbitrary 
             <see cref="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.ILog4NetRuntime"/> instance.
@@ -244,19 +239,6 @@
         </member>
         <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.ILog4NetRuntime.GetLogger(System.String)">
             <summary>Calls <see cref="M:Common.Logging.LogManager.GetLogger(System.String)"/></summary>
-        </member>
-        <member name="T:Common.Logging.Log4Net.NamespaceDoc">
-            <summary>
-            <para>
-            This namespace contains the implementations to plug log4net 1.2.9-1.2.11 into Common.Logging.
-            </para>
-            <para>For an example on how to configure
-            <list type="bullet">
-            <item>Common.Logging to render its output to log4net, see <see cref="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter"/>.</item>
-            <item>log4net to render its output to Common.Logging use <see cref="T:Common.Logging.Log4Net.CommonLoggingAppender"/>.</item>
-            </list>
-            </para>
-            </summary>
         </member>
     </members>
 </doc>

@@ -4,6 +4,41 @@
         <name>NuGet.Lucene</name>
     </assembly>
     <members>
+        <member name="T:NuGet.Lucene.Analysis.BoolNormalizingAnalyzer">
+            <summary>
+            Normalize boolean strings like <c>"true"</c> to be capitalized like <c>"True"</c>
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.IFastZipPackage">
+            <summary>
+              An extension of <see cref="T:NuGet.IPackage"/> that
+              can stream package contents reusing a single
+              stream without loading the entire package into
+              memory or using any temp files.
+            </summary>
+            <remarks>
+              <para>
+                Implementations are <b>not</b> thread-safe.
+              </para>
+              <para>
+                <see cref="M:System.IDisposable.Dispose"/> must be invoked
+                after any streams are accessed either via <see cref="M:NuGet.Lucene.IFastZipPackage.GetZipEntryStream(System.String)"/>
+                or via <see cref="M:NuGet.IPackageFile.GetStream"/>.
+              </para>
+            </remarks>
+        </member>
+        <member name="T:NuGet.Lucene.NuGetQueryParser">
+             <summary>
+             A query parser that mimics the behavior specified at
+             http://docs.nuget.org/docs/reference/search-syntax.
+            
+             Uses case-insensitive matching for field names and
+             uses a default field when the specified field is not found.
+            
+             Treats the field <c>Id</c> as a partial match / fuzzy search
+             and the field <c>PackageId</c> as an exact match.
+             </summary>
+        </member>
         <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.PackagePath">
             <summary>
             Directory to hold nupkg files that will be indexed by Lucene.
@@ -52,10 +87,32 @@
             <see cref="M:NuGet.Lucene.LuceneRepositoryConfigurator.Initialize"/> has been invoked.
             </summary>
         </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.PackageOverwriteMode">
+            <summary>
+            Specifies a policy of how conflicting packages should
+            be handled when adding a package that already exists.
+            (default: <see cref="F:NuGet.Lucene.PackageOverwriteMode.Allow"/>
+            </summary>
+        </member>
         <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.LuceneDirectory">
             <summary>
             Holds a reference to the Lucene Directory after
             <see cref="M:NuGet.Lucene.LuceneRepositoryConfigurator.Initialize"/> has been invoked.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.LuceneMergeFactor">
+            <summary>
+            Expert: overrides the default merge factor (10)
+            for the Lucene.Net <see cref="T:Lucene.Net.Index.IndexWriter"/>.
+            
+            Lower merge factors result in a smaller index
+            with less segments which improves search performance
+            but degrades indexing performance.
+            
+            Higher merge factors result in faster indexing
+            but slower search performance.
+            
+            The value must never be less than <c>2</c>.
             </summary>
         </member>
         <member name="T:NuGet.Lucene.GroupingPackagePathResolver">
@@ -69,6 +126,22 @@
             Specify how to sort results in <see cref="M:NuGet.Lucene.ILucenePackageRepository.Search(NuGet.Lucene.SearchCriteria)"/>.
             </summary>
         </member>
+        <member name="F:NuGet.Lucene.SynchronizationMode.Incremental">
+            <summary>
+            The default method. Compares packages in the file system with
+            the Lucene index and only makes changes where differences are
+            detected.
+            </summary>
+        </member>
+        <member name="F:NuGet.Lucene.SynchronizationMode.Complete">
+            <summary>
+            Completely rebuilds the Lucene index from scratch. This method
+            is much less efficient for large repositories but may be necessary
+            when upgrading NuGet.Lucene to a new version or when differences
+            are not correctly detected by comparing the last-modified date
+            of package files with index metadata.
+            </summary>
+        </member>
         <member name="M:NuGet.Lucene.Util.CollectionExtensions.TakeAvailable``1(System.Collections.Concurrent.BlockingCollection{``0},System.Collections.Generic.IList{``0},System.TimeSpan)">
             <summary>
             Waiting up to <paramref name="firstItemTimeout">firstItemTimeout</paramref>
@@ -76,17 +149,17 @@
             are immediately available.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.ILucenePackageRepository.AddPackageAsync(NuGet.IPackage)">
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.AddPackageAsync(NuGet.IPackage,System.Threading.CancellationToken)">
             <summary>
             Async implementation of <see cref="M:NuGet.IPackageRepository.AddPackage(NuGet.IPackage)"/>.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.ILucenePackageRepository.RemovePackageAsync(NuGet.IPackage)">
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.RemovePackageAsync(NuGet.IPackage,System.Threading.CancellationToken)">
             <summary>
             Async implementation of <see cref="M:NuGet.IPackageRepository.RemovePackage(NuGet.IPackage)"/>.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.ILucenePackageRepository.SynchronizeWithFileSystem(System.Threading.CancellationToken)">
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.SynchronizeWithFileSystem(NuGet.Lucene.SynchronizationMode,System.Threading.CancellationToken)">
             <summary>
             Scans the packages directory and compares it with
             packages in the Lucene index, then applies changes
@@ -117,9 +190,9 @@
             such as package hash, size, etc.
             </summary>
         </member>
-        <member name="M:NuGet.Lucene.ILucenePackageRepository.IncrementDownloadCount(NuGet.IPackage)">
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.IncrementDownloadCountAsync(NuGet.IPackage,System.Threading.CancellationToken)">
             <summary>
-            Increments the <see cref="P:NuGet.Lucene.LucenePackage.VersionDownloadCount"/> for 
+            Increments the <see cref="P:NuGet.Lucene.LucenePackage.VersionDownloadCount"/> for
             this package and the <see cref="P:NuGet.Lucene.LucenePackage.DownloadCount"/> for
             all packages with the same <see cref="P:NuGet.Lucene.LucenePackage.Id"/>.
             </summary>
@@ -129,11 +202,38 @@
             Overload of <see cref="M:NuGet.IServiceBasedRepository.Search(System.String,System.Collections.Generic.IEnumerable{System.String},System.Boolean)"/>
             using parameter object for better flexibility.
             </summary>
+            <exception cref="T:NuGet.Lucene.InvalidSearchCriteriaException">
+            When <see cref="P:NuGet.Lucene.SearchCriteria.SearchTerm"/> cannot be parsed.
+            </exception>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.GetAvailableSearchFieldNames">
+            <summary>
+            Get an enumeration of fields that can be queried using native Lucene queries.
+            </summary>
         </member>
         <member name="M:NuGet.Lucene.ILucenePackageRepository.Optimize">
             <summary>
             Requests that the Lucene index be optimized, forcing all segments
             to be merged and expunging deleted documents.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.CreateStreamForStagingPackage">
+             <summary>
+             Creates a stream appropriate for staging a package that will be added
+             after the contents are written into place.
+            
+             The stream returned automatically calculates a hash of the package contents
+             while the stream is being written to avoid additional I/O.
+             </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.LoadStagedPackage(NuGet.Lucene.IO.HashingWriteStream)">
+            <summary>
+            Loads a staged package (after the stream has been written).
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.ILucenePackageRepository.DiscardStagedPackage(NuGet.Lucene.IO.HashingWriteStream)">
+            <summary>
+            Deletes a temporary package that won't be added for whatever reason.
             </summary>
         </member>
         <member name="P:NuGet.Lucene.ILucenePackageRepository.LucenePackages">
@@ -197,6 +297,13 @@
             the Version part is semantically equal but formatted differently.
             For example, the versions 1.0 and 1.0.0 are considered equal by
             SemanticVersion, whereas this class treats them as not equal.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Util.FrameworkCompatibilityTool">
+            <summary>
+            Uses a list of supported frameworks of all packages currently in the index
+            to filter search results by a target framework that will only return packages
+            that are compatible or do not target any frameworks.
             </summary>
         </member>
     </members>

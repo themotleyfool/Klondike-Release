@@ -22,19 +22,19 @@
             Processes requests according to the provided cross domain policy.
             </summary>
         </member>
-        <member name="M:Microsoft.Owin.Cors.CorsMiddleware.#ctor(Microsoft.Owin.OwinMiddleware,Microsoft.Owin.Cors.CorsOptions)">
+        <member name="M:Microsoft.Owin.Cors.CorsMiddleware.#ctor(System.Func{System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.Tasks.Task},Microsoft.Owin.Cors.CorsOptions)">
             <summary>
             Creates a new instance of CorsMiddleware.
             </summary>
             <param name="next"></param>
             <param name="options"></param>
         </member>
-        <member name="M:Microsoft.Owin.Cors.CorsMiddleware.Invoke(Microsoft.Owin.IOwinContext)">
+        <member name="M:Microsoft.Owin.Cors.CorsMiddleware.Invoke(System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
             Evaluates and applies the CORS policy. Responses will be generated for preflight requests.
             Requests that are permitted by the CORS policy will be passed onto the next middleware.
             </summary>
-            <param name="context"></param>
+            <param name="environment"></param>
             <returns></returns>
         </member>
         <member name="T:Microsoft.Owin.Cors.CorsOptions">
