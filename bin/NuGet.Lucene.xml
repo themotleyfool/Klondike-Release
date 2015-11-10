@@ -75,6 +75,16 @@
             Defaults to SHA512.
             </summary>
         </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.DisablePackageHash">
+            <summary>
+            Disable package hashing.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.IgnorePackageFiles">
+            <summary>
+            Disable indexing package files.
+            </summary>
+        </member>
         <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.Repository">
             <summary>
             Holds a reference to the configured package repository
@@ -101,19 +111,19 @@
             </summary>
         </member>
         <member name="P:NuGet.Lucene.LuceneRepositoryConfigurator.LuceneMergeFactor">
-            <summary>
-            Expert: overrides the default merge factor (10)
-            for the Lucene.Net <see cref="T:Lucene.Net.Index.IndexWriter"/>.
+             <summary>
+             Expert: overrides the default merge factor (10)
+             for the Lucene.Net <see cref="T:Lucene.Net.Index.IndexWriter"/>.
             
-            Lower merge factors result in a smaller index
-            with less segments which improves search performance
-            but degrades indexing performance.
+             Lower merge factors result in a smaller index
+             with less segments which improves search performance
+             but degrades indexing performance.
             
-            Higher merge factors result in faster indexing
-            but slower search performance.
+             Higher merge factors result in faster indexing
+             but slower search performance.
             
-            The value must never be less than <c>2</c>.
-            </summary>
+             The value must never be less than <c>2</c>.
+             </summary>
         </member>
         <member name="T:NuGet.Lucene.GroupingPackagePathResolver">
             <summary>
@@ -147,6 +157,13 @@
             Waiting up to <paramref name="firstItemTimeout">firstItemTimeout</paramref>
             for the first item to become available, then return all other items that
             are immediately available.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Util.FrameworkCompatibilityTool">
+            <summary>
+            Uses a list of supported frameworks of all packages currently in the index
+            to filter search results by a target framework that will only return packages
+            that are compatible or do not target any frameworks.
             </summary>
         </member>
         <member name="M:NuGet.Lucene.ILucenePackageRepository.AddPackageAsync(NuGet.IPackage,System.Threading.CancellationToken)">
@@ -188,6 +205,12 @@
             Converts a given generic <c cref="T:NuGet.IPackage"/> and returns
             a <c cref="T:NuGet.Lucene.LucenePackage"/> that holds additional information
             such as package hash, size, etc.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.ILucenePackageRepository.LucenePackages">
+            <summary>
+            Provides access to more strongly typed packages to facilitate
+            querying on properties not found on <see cref="T:NuGet.IPackage"/>.
             </summary>
         </member>
         <member name="M:NuGet.Lucene.ILucenePackageRepository.IncrementDownloadCountAsync(NuGet.IPackage,System.Threading.CancellationToken)">
@@ -236,12 +259,6 @@
             Deletes a temporary package that won't be added for whatever reason.
             </summary>
         </member>
-        <member name="P:NuGet.Lucene.ILucenePackageRepository.LucenePackages">
-            <summary>
-            Provides access to more strongly typed packages to facilitate
-            querying on properties not found on <see cref="T:NuGet.IPackage"/>.
-            </summary>
-        </member>
         <member name="P:NuGet.Lucene.IndexDifferences.NewPackages">
             <summary>
             Packages on the files system but not in the index.
@@ -277,6 +294,16 @@
             Representation of a NuGet package stored/retrieved in a Lucene index.
             </summary>
         </member>
+        <member name="P:NuGet.Lucene.LucenePackageRepository.IgnorePackageFiles">
+             <summary>
+             Flag that enables or disables including list of files on <see cref="P:NuGet.Lucene.LucenePackage.Files"/>.
+             Setting this flag to <c>true</c> keeps the index smaller when packages with many files
+             are added. Setting this flag to <c>false</c> enables queries that match packages that
+             contain a file path.
+            
+             Default: <c>false</c>.
+             </summary>
+        </member>
         <member name="P:NuGet.Lucene.PackageFileSystemWatcher.QuietTime">
             <summary>
             Sets the amount of time to wait after receiving a <c cref="E:System.IO.FileSystemWatcher.Changed">Changed</c>
@@ -297,13 +324,6 @@
             the Version part is semantically equal but formatted differently.
             For example, the versions 1.0 and 1.0.0 are considered equal by
             SemanticVersion, whereas this class treats them as not equal.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Util.FrameworkCompatibilityTool">
-            <summary>
-            Uses a list of supported frameworks of all packages currently in the index
-            to filter search results by a target framework that will only return packages
-            that are compatible or do not target any frameworks.
             </summary>
         </member>
     </members>

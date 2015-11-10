@@ -13,11 +13,6 @@
             <param name="blacklistPathStrings">Optional list of path strings that should suppress this behavior.</param>
             <returns></returns>
         </member>
-        <member name="T:Klondike.MonoHardCodedODataWorkspaceHandler">
-            <summary>
-            See http://social.msdn.microsoft.com/Forums/en-US/2efaaba5-92cb-4ad4-97da-1216d495a295/bug-uriutilsensureescapedrelativeuri-fails-on-mono
-            </summary>
-        </member>
         <member name="T:Klondike.MetaController">
             <summary>
             Metadata about Klondike.
@@ -26,11 +21,6 @@
         <member name="M:Klondike.MetaController.GetComponentVersions">
             <summary>
             Gets version information for components of Klondike.
-            </summary>
-        </member>
-        <member name="P:Klondike.Startup.MonoCantEven">
-            <summary>
-            See https://bugzilla.xamarin.com/show_bug.cgi?id=21571
             </summary>
         </member>
         <member name="M:Klondike.IVirtualPathUtility.MapPath(System.String)">

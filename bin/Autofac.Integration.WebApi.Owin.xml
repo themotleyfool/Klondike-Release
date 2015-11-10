@@ -17,5 +17,16 @@
             <param name="configuration">The HTTP server configuration.</param>
             <returns>The application builder.</returns>
         </member>
+        <member name="M:Owin.AutofacWebApiAppBuilderExtensions.DisposeScopeOnAppDisposing(Owin.IAppBuilder,Autofac.ILifetimeScope)">
+            <summary>
+            Registers a callback to dispose an Autofac <see cref="T:Autofac.ILifetimeScope"/>
+            when the OWIN <c>host.OnAppDisposing</c> event is triggered. This is a
+            convenience method that will dispose an Autofac container or child scope
+            when an OWIN application is shutting down.
+            </summary>
+            <param name="app">The application builder.</param>
+            <param name="lifetimeScope">The Autofac lifetime scope that should be disposed.</param>
+            <returns>The application builder.</returns>
+        </member>
     </members>
 </doc>

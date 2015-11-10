@@ -1,0 +1,10 @@
+﻿2015-11-10 11:57:20,081 INFO   1 KlondikeService OnStart Using ServerFactory Nowin
+2015-11-10 11:57:20,374 INFO   1 LucenePackageRepository UpdatePackageCount Refreshing index. Package count: 0
+2015-11-10 11:57:21,964 INFO   1 KlondikeService OnStart Listening for HTTP requests on address(es): http://*:8080/
+2015-11-10 11:57:48,426 INFO   1 KlondikeService OnStop Stopping HTTP server.
+2015-11-10 11:57:48,433 INFO   1 Startup MoveNext Received OnAppDisposing event from OWIN container.
+2015-11-10 11:57:48,436 INFO   1 Startup MoveNext Disposing Autofac application container.
+2015-11-10 11:57:48,439 INFO   1 UserStore Dispose Stopping UserStore indexing services.
+2015-11-10 11:57:48,443 INFO   1 LuceneRepositoryConfigurator Dispose Stopping Lucene indexing services.
+2015-11-10 11:57:48,444 INFO   3 PackageIndexer IndexUpdateLoop Update task shutting down.
+2015-11-10 11:57:48,447 INFO   1 KlondikeService OnStop Waiting for background tasks to complete.

@@ -4,6 +4,12 @@
         <name>NuGet.Lucene.Web</name>
     </assembly>
     <members>
+        <member name="M:NuGet.Lucene.Web.Authentication.IApiKeyAuthentication.AuthenticateRequest(Microsoft.Owin.IOwinRequest)">
+            <summary>
+            Authenticate a request using the <c>X-NuGet-ApiKey</c> request header.
+            </summary>
+            <throws><see cref="T:System.Security.Authentication.AuthenticationException"/> when the key is specified but not valid.</throws>
+        </member>
         <member name="T:NuGet.Lucene.Web.Controllers.PackagesODataController">
             <summary>
             OData provider for Lucene based NuGet package repository.
@@ -25,87 +31,6 @@
             <summary>
             Provides PDB debugging symbol files to a debugger.
             </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.Formatters.MalformedMultipartFixingStream">
-            <summary>
-            NuGet client (as of 2.8.2) uses wrong newline character before closing
-            multi-part boundary when running on mono and <see cref="P:System.Environment.NewLine"/>
-            is <c>\n</c>. It should always use <c>\r\n</c> but does not.
-            
-            This stream decorator fixes these boundaries to be correct.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.Formatters.NuGetHtmlMicrodataFormatter">
-            <summary>
-            Extends <see cref="T:AspNet.WebApi.HtmlMicrodataFormatter.HtmlMicrodataFormatter"/> to include
-            customizations that improve markup for packages and related content.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.Models.DelegatingPackageRepository">
-            <summary>
-            A package repository base class suitable for decoration and composition.
-            </summary>
-        </member>
-        <member name="P:NuGet.Lucene.Web.Models.KeyChangeRequest.Key">
-            <summary>
-            The new key to set. If blank, one wil be generated.
-            </summary>
-        </member>
-        <member name="M:NuGet.Lucene.Web.Models.MirroringPackageRepository.ShouldLookInOrigin(System.String,System.Collections.Generic.List{NuGet.IPackage})">
-             <summary>
-             Determines if origin should be checked for additional package versions.
-             The default implementation returns <c>true</c> if <paramref name="localPackages"/>
-             is empty or if any of the local packages are mirrored.
-            
-             An alternate implementation could use a whitelist or blacklist.
-             </summary>
-        </member>
-        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Key">
-            <summary>
-            API Key to be used by nuget to authenticate as this user.
-            </summary>
-        </member>
-        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Roles">
-            <summary>
-            Roles granted to this user.
-            </summary>
-        </member>
-        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Overwrite">
-            <summary>
-            When <c>false</c>, prevent overwriting existing users.
-            Default is <c>true</c>.
-            </summary>
-        </member>
-        <member name="P:NuGet.Lucene.Web.Models.UpdateUserAttributes.RenameTo">
-            <summary>
-            When set, requests that a user is renamed to this value.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.Middleware.AnonymousPackageManagerMiddleware">
-            <summary>
-            When the request has not already been authenticated, this
-            module will authenticate the user and grant the
-            <see cref="F:NuGet.Lucene.Web.RoleNames.PackageManager"/> role.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.Middleware.LocalRequestAuthenticationMiddleware">
-            <summary>
-            When request originates from a local network address,
-            authenticate the user as <c>"LocalAdministrator"</c>
-            and grant all roles in <see cref="P:NuGet.Lucene.Web.RoleNames.All"/>.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.NuGetUserAgentConstraint">
-            <summary>
-            Constrains a route mapping to only match when the UserAgent product contains
-            <c>"NuGet"</c> (ignoring case).
-            </summary>
-        </member>
-        <member name="M:NuGet.Lucene.Web.Authentication.IApiKeyAuthentication.AuthenticateRequest(Microsoft.Owin.IOwinRequest)">
-            <summary>
-            Authenticate a request using the <c>X-NuGet-ApiKey</c> request header.
-            </summary>
-            <throws><see cref="T:System.Security.Authentication.AuthenticationException"/> when the key is specified but not valid.</throws>
         </member>
         <member name="T:NuGet.Lucene.Web.Controllers.NuGetDocumentationController">
             <summary>
@@ -301,6 +226,21 @@
             Changes the API key of the authenticated user.
             </summary>
         </member>
+        <member name="T:NuGet.Lucene.Web.Formatters.MalformedMultipartFixingStream">
+            <summary>
+            NuGet client (as of 2.8.2) uses wrong newline character before closing
+            multi-part boundary when running on mono and <see cref="P:System.Environment.NewLine"/>
+            is <c>\n</c>. It should always use <c>\r\n</c> but does not.
+            
+            This stream decorator fixes these boundaries to be correct.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Formatters.NuGetHtmlMicrodataFormatter">
+            <summary>
+            Extends <see cref="T:AspNet.WebApi.HtmlMicrodataFormatter.HtmlMicrodataFormatter"/> to include
+            customizations that improve markup for packages and related content.
+            </summary>
+        </member>
         <member name="M:NuGet.Lucene.Web.Formatters.MultipartFormDataMediaFormatter`2.ParseContentType(System.Net.Http.HttpContent)">
             <summary>
             Manually parse malformed content header that does not quote boundary parameter value.
@@ -314,16 +254,145 @@
              * Ensure eol style is CRLF at ending boundary marker
             </summary>
         </member>
+        <member name="P:NuGet.Lucene.Web.IUserStore.LocalAdministratorUsername">
+            <summary>
+            Gets or sets the string value of the local administrator username.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.IUserStore.HandleLocalRequestsAsAdmin">
+            <summary>
+            Gets or sets the boolean value that indicates if requests on a
+            local address should automatically be granted administrative roles.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.IUserStore.LocalAdministratorApiKey">
+            <summary>
+            Gets or sets the string value of the local administrators api key.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.IUserStore.IsLocalAdministratorEnabled">
+            <summary>
+            Gets the boolean value that indicates if the local administrator
+            user is enabled.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.IUserStore.All">
+            <summary>
+            Provides access to users to facilitate iteration over the collection.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.Initialize">
+            <summary>
+            Configures the user store.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.FindByUsername(System.String)">
+            <summary>
+            Gets a user by searching on username.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.FindByKey(System.String)">
+            <summary>
+            Gets a user by searching on api key.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.Add(NuGet.Lucene.Web.Authentication.ApiUser)">
+            <summary>
+            Adds a user to the store.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.Add(NuGet.Lucene.Web.Authentication.ApiUser,NuGet.Lucene.Web.UserUpdateMode)">
+            <summary>
+            Adds a user to the store specifying the update mode.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.Update(System.String,System.String,System.String,System.String[],NuGet.Lucene.Web.UserUpdateMode)">
+            <summary>
+            Updates a user by searching on username.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.Delete(System.String)">
+            <summary>
+            Deletes a user by searching on username.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.DeleteAll">
+            <summary>
+            Deletes all users in the store.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.IUserStore.ChangeApiKey(System.String,System.String)">
+             <summary>
+             Changes the requested users api key.
+            
+             The string returned is the value of the new api key.
+             </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Middleware.AnonymousPackageManagerMiddleware">
+            <summary>
+            When the request has not already been authenticated, this
+            module will authenticate the user and grant the
+            <see cref="F:NuGet.Lucene.Web.RoleNames.PackageManager"/> role.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Middleware.LocalRequestAuthenticationMiddleware">
+            <summary>
+            When request originates from a local network address,
+            authenticate the user as <c>"LocalAdministrator"</c>
+            and grant all roles in <see cref="P:NuGet.Lucene.Web.RoleNames.All"/>.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.Models.DelegatingPackageRepository">
+            <summary>
+            A package repository base class suitable for decoration and composition.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.KeyChangeRequest.Key">
+            <summary>
+            The new key to set. If blank, one wil be generated.
+            </summary>
+        </member>
+        <member name="M:NuGet.Lucene.Web.Models.MirroringPackageRepository.ShouldLookInOrigin(System.String,System.Collections.Generic.List{NuGet.IPackage})">
+             <summary>
+             Determines if origin should be checked for additional package versions.
+             The default implementation returns <c>true</c> if <paramref name="localPackages"/>
+             is empty or if any of the local packages are mirrored.
+            
+             An alternate implementation could use a whitelist or blacklist.
+             </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.UpdateUserAttributes.RenameTo">
+            <summary>
+            When set, requests that a user is renamed to this value.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Key">
+            <summary>
+            API Key to be used by nuget to authenticate as this user.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Roles">
+            <summary>
+            Roles granted to this user.
+            </summary>
+        </member>
+        <member name="P:NuGet.Lucene.Web.Models.UserAttributes.Overwrite">
+            <summary>
+            When <c>false</c>, prevent overwriting existing users.
+            Default is <c>true</c>.
+            </summary>
+        </member>
+        <member name="T:NuGet.Lucene.Web.NuGetUserAgentConstraint">
+            <summary>
+            Constrains a route mapping to only match when the UserAgent product contains
+            <c>"NuGet"</c> (ignoring case).
+            </summary>
+        </member>
         <member name="T:NuGet.Lucene.Web.MessageHandlers.CrossOriginMessageHandler">
             <summary>
             Adds support for OPTIONS requests and adds Cross-Origin Resource Sharing (CORS)
             response headers.
             TODO: evaluate replacement with http://aspnetwebstack.codeplex.com/wikipage?title=CORS%20support%20for%20ASP.NET%20Web%20API when it ships.
-            </summary>
-        </member>
-        <member name="T:NuGet.Lucene.Web.RedirectHandler">
-            <summary>
-            Sends a 307 Redirect to the given route with specified route values.
             </summary>
         </member>
         <member name="M:NuGet.Lucene.Web.OData.Batch.HeaderCascadingODataBatchHandler.CopyRequestHeaders(System.Net.Http.HttpRequestMessage,System.Collections.Generic.IList{System.Web.Http.OData.Batch.ODataBatchRequestItem})">
@@ -369,6 +438,11 @@
             See https://trocolate.wordpress.com/2012/07/19/mitigate-issue-260-in-batching-scenario/
             </summary>
         </member>
+        <member name="T:NuGet.Lucene.Web.RedirectHandler">
+            <summary>
+            Sends a 307 Redirect to the given route with specified route values.
+            </summary>
+        </member>
         <member name="F:NuGet.Lucene.Web.RoleNames.AccountAdministrator">
             <summary>
             Allowed to create and delete accounts,
@@ -400,13 +474,6 @@
             Uses default contract resolver for types in the SignalR assembly
             and camel case for all other types.
             </summary>
-        </member>
-        <member name="M:NuGet.Lucene.Web.Symbols.SymbolSource.GetUnzippedPackagePath(NuGet.IPackageName)">
-            <summary>
-            Returns the path a package should be decompressed to
-            </summary>
-            <param name="package"></param>
-            <returns></returns>
         </member>
         <member name="M:NuGet.Lucene.Web.Symbols.SymbolSource.CreateTempFolderForPackage(NuGet.IPackageName)">
             <summary>
