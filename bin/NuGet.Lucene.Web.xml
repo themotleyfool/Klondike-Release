@@ -227,13 +227,13 @@
             </summary>
         </member>
         <member name="T:NuGet.Lucene.Web.Formatters.MalformedMultipartFixingStream">
-            <summary>
-            NuGet client (as of 2.8.2) uses wrong newline character before closing
-            multi-part boundary when running on mono and <see cref="P:System.Environment.NewLine"/>
-            is <c>\n</c>. It should always use <c>\r\n</c> but does not.
+             <summary>
+             NuGet client (as of 2.8.2) uses wrong newline character before closing
+             multi-part boundary when running on mono and <see cref="P:System.Environment.NewLine"/>
+             is <c>\n</c>. It should always use <c>\r\n</c> but does not.
             
-            This stream decorator fixes these boundaries to be correct.
-            </summary>
+             This stream decorator fixes these boundaries to be correct.
+             </summary>
         </member>
         <member name="T:NuGet.Lucene.Web.Formatters.NuGetHtmlMicrodataFormatter">
             <summary>
