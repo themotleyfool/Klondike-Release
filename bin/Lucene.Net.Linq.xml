@@ -119,7 +119,7 @@
             to a Lucene field.
             </summary>
             <param name="expression">A simple MemberExpression or UnaryExpression
-            containing a property accessor such as <c>x =&gt; x.MyPropertyName</c></param>
+            containing a property accessor such as <c>x => x.MyPropertyName</c></param>
             <returns>A <see cref="T:Lucene.Net.Linq.Fluent.PropertyMap`1"/> that allows further customizatoin of
             how the field will be analyzed, stored and indexed.</returns>
         </member>
@@ -175,147 +175,16 @@
             Specify the fixed value for the key. May not be null.
             </summary>
         </member>
-        <member name="T:Lucene.Net.Linq.Mapping.IDocumentMapper`1">
-            <summary>
-            Converts objects of type <typeparamref name="T"/> to
-            <see cref="T:Lucene.Net.Documents.Document"/> and back. Also creates
-            <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/>s to track, update
-            or delete documents by key.
-            </summary>
-        </member>
-        <member name="T:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider">
-            <summary>
-            Provides mapping information for the properties
-            of a given type and corresponding field metadata.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.GetMappingInfo(System.String)">
-            <summary>
-            Returns detailed mapping info for a given property name.
-            DefaultSearchProperty names are case sensitive.
-            </summary>
-            <exception cref="T:System.Collections.Generic.KeyNotFoundException">if the property name is not found.</exception>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.CreateMultiFieldQuery(System.String)">
-            <summary>
-            Create a query that matches the pattern on any field.
-            Used in conjunction with <see cref="M:Lucene.Net.Linq.LuceneMethods.AnyField``1(``0)"/>
-            </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.AllProperties">
-            <summary>
-            Returns the set of fields defined for the given document.
-            </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.KeyProperties">
-            <summary>
-            Returns the set of property names used to compose
-            a <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> for the document.
-            </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.IndexedProperties">
-            <summary>
-            Returns the set of fields defined for the given document.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToObject(Lucene.Net.Documents.Document,Lucene.Net.Linq.IQueryExecutionContext,`0)">
-            <summary>
-            Hydrates the properties on the target type using fields
-            in the Lucene.Net Document.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToDocument(`0,Lucene.Net.Documents.Document)">
-            <summary>
-            Transfers property values on the source object
-            to fields on the Lucene.Net Document.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToKey(`0)">
-            <summary>
-            Create a composite key representing a unique
-            identity for the document.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.Equals(`0,`0)">
-            <summary>
-            Compare two instances of <typeparamref name="T"/>
-            to determine if they are considered equal. This
-            method is used to detect modified objects in a
-            <see cref="T:Lucene.Net.Linq.ISession`1"/> to determine which
-            objects are dirty and need to be updated during
-            commit.
-            </summary>
-            <remarks>
-            This method has been replaced by <see cref="M:Lucene.Net.Linq.Mapping.IDocumentModificationDetector`1.IsModified(`0,Lucene.Net.Documents.Document)"/> 
-            in 3.2 and may be removed in future versions.
-            </remarks>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.PrepareSearchSettings(Lucene.Net.Linq.IQueryExecutionContext)">
-            <summary>
-            Called before a search is executed to allow
-            customizations to be applied on the <see cref="T:Lucene.Net.Search.Searcher"/>,
-            <see cref="T:Lucene.Net.Search.Query"/> and <see cref="T:Lucene.Net.Search.Filter"/>.
-            </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.Mapping.IDocumentMapper`1.Analyzer">
-            <summary>
-            Gets an analyzer to be used for preparing queries
-            and writing documents.
-            </summary>
-        </member>
-        <member name="T:Lucene.Net.Linq.Mapping.IDocumentKeyConverter">
-            <summary>
-            <para>
-            Allows a <see cref="T:Lucene.Net.Documents.Document"/> to be converted
-            to an <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> without first
-            being mapped onto an object.
-            </para>
-            <para>Since 3.2</para>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IDocumentKeyConverter.ToKey(Lucene.Net.Documents.Document)">
-            <summary>
-            Create a composite key representing a unique
-            identity for the document. <see cref="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToKey(`0)"/>
-            </summary>
-        </member>
-        <member name="T:Lucene.Net.Linq.Mapping.IDocumentModificationDetector`1">
-            <summary>
-            <para>
-            Determines if an item has been modified for the purpose
-            of writing modified documents within an <see cref="T:Lucene.Net.Linq.ISession`1"/>
-            </para>
-            <para>Since 3.2</para>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IDocumentModificationDetector`1.IsModified(`0,Lucene.Net.Documents.Document)">
-            <summary>
-            Determine if an item is modified by comparing
-            the properties to the fields on the document
-            from which the item was initialized.
-            This method replaces <see cref="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.Equals(`0,`0)"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.DocumentMapperBase`1.#ctor(Lucene.Net.Util.Version)">
-            <summary>
-            Constructs an instance that will create an <see cref="P:Lucene.Net.Linq.Mapping.DocumentMapperBase`1.Analyzer"/>
-            using metadata on public properties on the type <typeparamref name="T"/>.
-            </summary>
-            <param name="version">Version compatibility for analyzers and indexers.</param>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.DocumentMapperBase`1.#ctor(Lucene.Net.Util.Version,Lucene.Net.Analysis.Analyzer)">
-            <summary>
-            Constructs an instance with an externall supplied analyzer
-            and the compatibility version of the index.
-            </summary>
-            <param name="version">Version compatibility for analyzers and indexers.</param>
-            <param name="externalAnalyzer"></param>
-        </member>
         <member name="T:Lucene.Net.Linq.Fluent.NumericPropertyMap`1">
             <summary>
             Extends <see cref="T:Lucene.Net.Linq.Fluent.PropertyMap`1"/> to allow a property
             to be indexed as a <see cref="T:Lucene.Net.Documents.NumericField"/> with a
             given precision step. See <see cref="M:Lucene.Net.Linq.Fluent.PropertyMap`1.AsNumericField"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Fluent.NumericPropertyMap`1.WithPrecisionStep(System.Int32)">
+            <summary>
+            Sets the precision step for the field. Defaults to <see cref="F:Lucene.Net.Util.NumericUtils.PRECISION_STEP_DEFAULT"/>.
             </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Fluent.PropertyMap`1">
@@ -401,6 +270,12 @@
             when building queries.
             </summary>
         </member>
+        <member name="P:Lucene.Net.Linq.Fluent.PropertyMap`1.WithTermVector">
+            <summary>
+            Controls whether term vectors are stored for later retrieval.
+            See <see cref="T:Lucene.Net.Documents.Field.TermVector"/> for more info.
+            </summary>
+        </member>
         <member name="M:Lucene.Net.Linq.Fluent.PropertyMap`1.ParseWithAndOperatorByDefault">
             <summary>
             Set the <see cref="P:Lucene.Net.QueryParsers.QueryParser.DefaultOperator"/> to
@@ -414,17 +289,6 @@
             use <see cref="F:Lucene.Net.QueryParsers.QueryParser.OR_OPERATOR"/> by default
             when parsing queries that contain multiple terms. This
             is the default behavior.
-            </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.Fluent.PropertyMap`1.WithTermVector">
-            <summary>
-            Controls whether term vectors are stored for later retrieval.
-            See <see cref="T:Lucene.Net.Documents.Field.TermVector"/> for more info.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Fluent.NumericPropertyMap`1.WithPrecisionStep(System.Int32)">
-            <summary>
-            Sets the precision step for the field. Defaults to <see cref="F:Lucene.Net.Util.NumericUtils.PRECISION_STEP_DEFAULT"/>.
             </summary>
         </member>
         <member name="T:Lucene.Net.Linq.IQueryExecutionContext">
@@ -665,10 +529,160 @@
             Retrieves the value for a given property.
             </summary>
         </member>
+        <member name="M:Lucene.Net.Linq.Mapping.DocumentMapperBase`1.#ctor(Lucene.Net.Util.Version)">
+            <summary>
+            Constructs an instance that will create an <see cref="P:Lucene.Net.Linq.Mapping.DocumentMapperBase`1.Analyzer"/>
+            using metadata on public properties on the type <typeparamref name="T"/>.
+            </summary>
+            <param name="version">Version compatibility for analyzers and indexers.</param>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.DocumentMapperBase`1.#ctor(Lucene.Net.Util.Version,Lucene.Net.Analysis.Analyzer)">
+            <summary>
+            Constructs an instance with an externall supplied analyzer
+            and the compatibility version of the index.
+            </summary>
+            <param name="version">Version compatibility for analyzers and indexers.</param>
+            <param name="externalAnalyzer"></param>
+        </member>
+        <member name="T:Lucene.Net.Linq.Mapping.IDocumentFieldConverter">
+            <summary>
+            <para>
+            Extension interface for <see cref="T:Lucene.Net.Linq.Mapping.IFieldMapper`1"/> to enable
+            building <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> without needing to construct
+            extra instances of the object being mapped.
+            </para>
+            <para>Since 3.2</para>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IDocumentFieldConverter.GetFieldValue(Lucene.Net.Documents.Document)">
+            <summary>
+            Retrieve a field from the given document and
+            convert it to a value suitable for the given mapping.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Linq.Mapping.IDocumentKeyConverter">
+            <summary>
+            <para>
+            Allows a <see cref="T:Lucene.Net.Documents.Document"/> to be converted
+            to an <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> without first
+            being mapped onto an object.
+            </para>
+            <para>Since 3.2</para>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IDocumentKeyConverter.ToKey(Lucene.Net.Documents.Document)">
+            <summary>
+            Create a composite key representing a unique
+            identity for the document. <see cref="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToKey(`0)"/>
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Linq.Mapping.IDocumentMapper`1">
+            <summary>
+            Converts objects of type <typeparamref name="T"/> to
+            <see cref="T:Lucene.Net.Documents.Document"/> and back. Also creates
+            <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/>s to track, update
+            or delete documents by key.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToObject(Lucene.Net.Documents.Document,Lucene.Net.Linq.IQueryExecutionContext,`0)">
+            <summary>
+            Hydrates the properties on the target type using fields
+            in the Lucene.Net Document.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToDocument(`0,Lucene.Net.Documents.Document)">
+            <summary>
+            Transfers property values on the source object
+            to fields on the Lucene.Net Document.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.ToKey(`0)">
+            <summary>
+            Create a composite key representing a unique
+            identity for the document.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.Equals(`0,`0)">
+            <summary>
+            Compare two instances of <typeparamref name="T"/>
+            to determine if they are considered equal. This
+            method is used to detect modified objects in a
+            <see cref="T:Lucene.Net.Linq.ISession`1"/> to determine which
+            objects are dirty and need to be updated during
+            commit.
+            </summary>
+            <remarks>
+            This method has been replaced by <see cref="M:Lucene.Net.Linq.Mapping.IDocumentModificationDetector`1.IsModified(`0,Lucene.Net.Documents.Document)"/> 
+            in 3.2 and may be removed in future versions.
+            </remarks>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.PrepareSearchSettings(Lucene.Net.Linq.IQueryExecutionContext)">
+            <summary>
+            Called before a search is executed to allow
+            customizations to be applied on the <see cref="T:Lucene.Net.Search.Searcher"/>,
+            <see cref="T:Lucene.Net.Search.Query"/> and <see cref="T:Lucene.Net.Search.Filter"/>.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.Mapping.IDocumentMapper`1.Analyzer">
+            <summary>
+            Gets an analyzer to be used for preparing queries
+            and writing documents.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Linq.Mapping.IDocumentModificationDetector`1">
+            <summary>
+            <para>
+            Determines if an item has been modified for the purpose
+            of writing modified documents within an <see cref="T:Lucene.Net.Linq.ISession`1"/>
+            </para>
+            <para>Since 3.2</para>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IDocumentModificationDetector`1.IsModified(`0,Lucene.Net.Documents.Document)">
+            <summary>
+            Determine if an item is modified by comparing
+            the properties to the fields on the document
+            from which the item was initialized.
+            This method replaces <see cref="M:Lucene.Net.Linq.Mapping.IDocumentMapper`1.Equals(`0,`0)"/>
+            </summary>
+        </member>
         <member name="T:Lucene.Net.Linq.Mapping.IFieldMapper`1">
             <summary>
             Maps Lucene.Net <see cref="T:Lucene.Net.Documents.Field"/>s onto instances
             of <typeparamref name="T"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IFieldMapper`1.CopyFromDocument(Lucene.Net.Documents.Document,Lucene.Net.Linq.IQueryExecutionContext,`0)">
+            <summary>
+            Retrieve <see cref="T:Lucene.Net.Documents.Field"/> or other metadata
+            from <paramref name="source"/> and <paramref name="context"/>
+            and apply to <paramref name="target"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IFieldMapper`1.CopyToDocument(`0,Lucene.Net.Documents.Document)">
+            <summary>
+            Convert a DefaultSearchProperty or other data on an instance
+            of <paramref name="source"/> into a <see cref="T:Lucene.Net.Documents.Field"/>
+            on the <paramref name="target"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.IFieldMapper`1.GetPropertyValue(`0)">
+            <summary>
+            Retrieve a value from <paramref name="source"/>
+            for the purposes of constructing an <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/>
+            or comparing instances of <typeparamref name="T"/>
+            to detect dirty objects.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMapper`1.Analyzer">
+            <summary>
+            Gets the Analyzer to be used for indexing this field
+            or parsing queries on this field.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMapper`1.IndexMode">
+            <summary>
+            Gets the index mode for the field.
             </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Mapping.IFieldMappingInfo">
@@ -676,6 +690,17 @@
             Holds mapping information that allows
             properties on types to be mapped to Lucene
             Fields and vice versa.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfo.FieldName">
+            <summary>
+            Name of Lucene field. By default, this
+            will be the same as <see cref="P:Lucene.Net.Linq.Mapping.IFieldMappingInfo.PropertyName"/>.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfo.PropertyName">
+            <summary>
+            Property name.
             </summary>
         </member>
         <member name="M:Lucene.Net.Linq.Mapping.IFieldMappingInfo.ConvertToQueryExpression(System.Object)">
@@ -714,64 +739,39 @@
             </summary>
             <param name="reverse"></param>
         </member>
-        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfo.FieldName">
+        <member name="T:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider">
             <summary>
-            Name of Lucene field. By default, this
-            will be the same as <see cref="P:Lucene.Net.Linq.Mapping.IFieldMappingInfo.PropertyName"/>.
+            Provides mapping information for the properties
+            of a given type and corresponding field metadata.
             </summary>
         </member>
-        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfo.PropertyName">
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.AllProperties">
             <summary>
-            Property name.
+            Returns the set of fields defined for the given document.
             </summary>
         </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IFieldMapper`1.CopyFromDocument(Lucene.Net.Documents.Document,Lucene.Net.Linq.IQueryExecutionContext,`0)">
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.KeyProperties">
             <summary>
-            Retrieve <see cref="T:Lucene.Net.Documents.Field"/> or other metadata
-            from <paramref name="source"/> and <paramref name="context"/>
-            and apply to <paramref name="target"/>.
+            Returns the set of property names used to compose
+            a <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> for the document.
             </summary>
         </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IFieldMapper`1.CopyToDocument(`0,Lucene.Net.Documents.Document)">
+        <member name="P:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.IndexedProperties">
             <summary>
-            Convert a DefaultSearchProperty or other data on an instance
-            of <paramref name="source"/> into a <see cref="T:Lucene.Net.Documents.Field"/>
-            on the <paramref name="target"/>.
+            Returns the set of fields defined for the given document.
             </summary>
         </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IFieldMapper`1.GetPropertyValue(`0)">
+        <member name="M:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.GetMappingInfo(System.String)">
             <summary>
-            Retrieve a value from <paramref name="source"/>
-            for the purposes of constructing an <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/>
-            or comparing instances of <typeparamref name="T"/>
-            to detect dirty objects.
+            Returns detailed mapping info for a given property name.
+            DefaultSearchProperty names are case sensitive.
             </summary>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">if the property name is not found.</exception>
         </member>
-        <member name="P:Lucene.Net.Linq.Mapping.IFieldMapper`1.Analyzer">
+        <member name="M:Lucene.Net.Linq.Mapping.IFieldMappingInfoProvider.CreateMultiFieldQuery(System.String)">
             <summary>
-            Gets the Analyzer to be used for indexing this field
-            or parsing queries on this field.
-            </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.Mapping.IFieldMapper`1.IndexMode">
-            <summary>
-            Gets the index mode for the field.
-            </summary>
-        </member>
-        <member name="T:Lucene.Net.Linq.Mapping.IDocumentFieldConverter">
-            <summary>
-            <para>
-            Extension interface for <see cref="T:Lucene.Net.Linq.Mapping.IFieldMapper`1"/> to enable
-            building <see cref="T:Lucene.Net.Linq.Mapping.IDocumentKey"/> without needing to construct
-            extra instances of the object being mapped.
-            </para>
-            <para>Since 3.2</para>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.IDocumentFieldConverter.GetFieldValue(Lucene.Net.Documents.Document)">
-            <summary>
-            Retrieve a field from the given document and
-            convert it to a value suitable for the given mapping.
+            Create a query that matches the pattern on any field.
+            Used in conjunction with <see cref="M:Lucene.Net.Linq.LuceneMethods.AnyField``1(``0)"/>
             </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Mapping.TermFreqVectorDocumentMapper`1">
@@ -782,386 +782,8 @@
             can be enabled by setting <see cref="P:Lucene.Net.Linq.Mapping.FieldAttribute.TermVector"/>.
             </summary>
         </member>
-        <member name="T:Lucene.Net.Linq.Mapping.ReflectionDocumentMapper`1">
-            <summary>
-            Maps public properties on <typeparamref name="T"/> to
-            Lucene <see cref="T:Lucene.Net.Documents.Field"/>s using optional metadata
-            attributes such as <see cref="T:Lucene.Net.Linq.Mapping.FieldAttribute"/>,
-            <see cref="T:Lucene.Net.Linq.Mapping.NumericFieldAttribute"/>,
-            <see cref="T:Lucene.Net.Linq.Mapping.IgnoreFieldAttribute"/>,
-            <see cref="T:Lucene.Net.Linq.Mapping.DocumentKeyAttribute"/>
-            and <see cref="T:Lucene.Net.Linq.Mapping.QueryScoreAttribute"/>.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.ReflectionDocumentMapper`1.#ctor(Lucene.Net.Util.Version)">
-            <summary>
-            Constructs an instance that will create an <see cref="T:Lucene.Net.Analysis.Analyzer"/>
-            using metadata on public properties on the type <typeparamref name="T"/>.
-            </summary>
-            <param name="version">Version compatibility for analyzers and indexers.</param>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.ReflectionDocumentMapper`1.#ctor(Lucene.Net.Util.Version,Lucene.Net.Analysis.Analyzer)">
-            <summary>
-            Constructs an instance with an externall supplied analyzer
-            and the compatibility version of the index.
-            </summary>
-            <param name="version">Version compatibility for analyzers and indexers.</param>
-            <param name="externalAnalyzer"></param>
-        </member>
         <member name="T:Lucene.Net.Linq.Mapping.TermVectorMode">
             <see cref="T:Lucene.Net.Documents.Field.TermVector"/>
-        </member>
-        <member name="T:Lucene.Net.Linq.LuceneDataProvider">
-            <summary>
-            Provides IQueryable access to a Lucene.Net index as well as an API
-            for adding, deleting and replacing documents within atomic transactions.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Analysis.Analyzer,Lucene.Net.Util.Version)">
-            <summary>
-            Constructs a new instance with a client-provided <see cref="P:Lucene.Net.Linq.LuceneDataProvider.Analyzer"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Util.Version)">
-            <summary>
-            Constructs a new instance.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Util.Version,Lucene.Net.Index.IndexWriter)">
-            <summary>
-            Constructs a new instance with an externally provided <see cref="P:Lucene.Net.Linq.LuceneDataProvider.IndexWriter"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Analysis.Analyzer,Lucene.Net.Util.Version,Lucene.Net.Index.IndexWriter)">
-            <summary>
-            Constructs a new instance with a client-provided <see cref="P:Lucene.Net.Linq.LuceneDataProvider.Analyzer"/> and <see cref="P:Lucene.Net.Linq.LuceneDataProvider.IndexWriter"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Util.Version,Lucene.Net.Linq.Abstractions.IIndexWriter,System.Object)">
-            <summary>
-            Constructs a new instance with a client provided <see cref="P:Lucene.Net.Linq.LuceneDataProvider.Analyzer"/>.
-            If the supplied IndexWriter will be written to outside of this instance of LuceneDataProvider,
-            the <paramref name="transactionLock"/> will be used to coordinate writes.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Analysis.Analyzer,Lucene.Net.Util.Version,Lucene.Net.Linq.Abstractions.IIndexWriter,System.Object)">
-            <summary>
-            Constructs a new instance.
-            If the supplied IndexWriter will be written to outside of this instance of LuceneDataProvider,
-            the <paramref name="transactionLock"/> will be used to coordinate writes.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.CreateQueryParser``1">
-             <summary>
-             Create a <see cref="T:Lucene.Net.QueryParsers.QueryParser"/> suitable for parsing advanced queries
-             that cannot not expressed as LINQ (e.g. queries submitted by a user).
-            
-             After the instance is returned, options such as <see cref="P:Lucene.Net.QueryParsers.QueryParser.AllowLeadingWildcard"/>
-             and <see cref="P:Lucene.Net.QueryParsers.QueryParser.Field"/> can be customized to the clients needs.
-             </summary>
-             <typeparam name="T">The type of document that queries will be built against.</typeparam>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectFactory{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            Returns an IQueryable implementation where the type being mapped
-            from <c cref="T:Lucene.Net.Documents.Document"/> is constructed by a factory delegate.
-            </summary>
-            <typeparam name="T">The type of object that Document will be mapped onto.</typeparam>
-            <param name="lookup">Factory method to instantiate new instances of T.</param>
-            <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.GetIndexedPropertyNames``1">
-            <summary>
-            Returns an enumeration of fields names that are indexed for a given object.
-            This may be useful in conjunction with <see cref="M:Lucene.Net.Linq.LuceneDataProvider.CreateQueryParser``1"/> to
-            allow users to specify advanced custom queries.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0},Lucene.Net.Linq.Mapping.IDocumentModificationDetector{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0},Lucene.Net.Linq.Mapping.IDocumentModificationDetector{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            Opens a session for staging changes and then committing them atomically.
-            </summary>
-            <param name="lookup">Factory delegate that creates new instances of <typeparamref name="T"/></param>
-            <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
-            <typeparam name="T">The type of object that will be mapped to <c cref="T:Lucene.Net.Documents.Document"/>.</typeparam>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0},Lucene.Net.Linq.Mapping.IDocumentModificationDetector{``0})">
-            <summary>
-            Opens a session for staging changes and then committing them atomically.
-            </summary>
-            <param name="factory">Factory delegate that creates new instances of <typeparamref name="T"/></param>
-            <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
-            <param name="documentModificationDetector">Helper to determine when instances of <typeparamref name="T"/> are modified
-                and need to be updated in the index when the session is committed.
-            </param>
-            <typeparam name="T">The type of object that will be mapped to <c cref="T:Lucene.Net.Documents.Document"/>.</typeparam>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0},Lucene.Net.Linq.Mapping.IDocumentModificationDetector{``0})">
-            <summary>
-            Opens a session for staging changes and then committing them atomically.
-            </summary>
-            <param name="lookup">Factory delegate that resolves instances of <typeparamref name="T"/></param>
-            <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
-            <param name="documentModificationDetector">Helper to determine when instances of <typeparamref name="T"/> are modified
-                and need to be updated in the index when the session is committed.
-            </param>
-            <typeparam name="T">The type of object that will be mapped to <c cref="T:Lucene.Net.Documents.Document"/>.</typeparam>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectFactory{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0})">
-            <summary>
-            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
-             <summary>
-             Registers a callback to be invoked when a new IndexSearcher is being initialized.
-             This method allows an IndexSearcher to be "warmed up" by executing one or more
-             queries before the instance becomes visible on other threads.
-            
-             While callbacks are being executed, other threads will continue to use the previous
-             instance of IndexSearcher if this is not the first instance being initialized.
-            
-             If this is the first instance, other threads will block until all callbacks complete.
-             </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.LuceneDataProvider.Settings">
-            <summary>
-            Settings that enable or disable optional behavior.
-            </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.LuceneDataProvider.LuceneVersion">
-            <summary>
-            Gets the index format version provided by constructor.
-            </summary>
-        </member>
-        <member name="P:Lucene.Net.Linq.LuceneDataProvider.IndexWriter">
-            <summary>
-            Retrieves the instance of IndexWriter that will be used by all
-            sessions created by this instance. If the current writer has
-            been disposed or a rollback occurred, a new instance will be
-            created, unless the instance was passed in as a constructor
-            parameter.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Context.ReopenSearcher(Lucene.Net.Search.IndexSearcher@)">
-            <summary>
-            Reopen the <see cref="T:Lucene.Net.Index.IndexReader"/>. If the index has not changed,
-            return <c>false</c>. If the index has changed, set <paramref name="searcher"/>
-            with a new <see cref="T:Lucene.Net.Search.IndexSearcher"/> instance and return <c>true</c>.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.RelinqQueryParserFactory.CreateExpressionTreeProcessor">
-            <summary>
-            Creates an <c cref="T:Remotion.Linq.Parsing.Structure.IExpressionTreeProcessor"/> that will execute
-            <c cref="T:Lucene.Net.Linq.Transformation.AllowSpecialCharactersExpressionTransformer"/>
-            before executing <c cref="T:Remotion.Linq.Parsing.Structure.ExpressionTreeProcessors.PartialEvaluatingExpressionTreeProcessor"/>
-            and other default processors. 
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.ISession`1.Add(Lucene.Net.Linq.KeyConstraint,`0[])">
-            <summary>
-            Add items to the index allowing for specific key constraint behavior
-            </summary>
-            <param name="constraint"><see cref="F:Lucene.Net.Linq.KeyConstraint.Unique"/> is the default behavior, <see cref="F:Lucene.Net.Linq.KeyConstraint.None"/> will
-            not perform a delete operation to ensure uniqueness</param>
-            <param name="items"></param>
-        </member>
-        <member name="T:Lucene.Net.Linq.ObjectFactory`1">
-            <summary>
-            Delegate used by <see cref="T:Lucene.Net.Linq.LuceneDataProvider"/> to create instances of objects that do not
-            have public default constructors.
-            </summary>
-            <typeparam name="T">The type of object <see cref="T:Lucene.Net.Documents.Document"/>s will be mapped onto.</typeparam>
-            <returns>An instance of <paramref name="T"/></returns>
-        </member>
-        <member name="T:Lucene.Net.Linq.ObjectLookup`1">
-            <summary>
-            Delegate used by <see cref="T:Lucene.Net.Linq.LuceneDataProvider"/> to create or reuse instances of objects
-            for advanced clients that may wish to provide caching.
-            </summary>
-            <typeparam name="T">The type of object <see cref="T:Lucene.Net.Documents.Document"/>s will be mapped onto.</typeparam>
-            <param name="key">A key that uniquely identifies the <see cref="T:Lucene.Net.Documents.Document"/>.</param>
-            <returns>An instance of <paramref name="T"/></returns>
-        </member>
-        <member name="T:Lucene.Net.Linq.LuceneMethods">
-            <summary>
-            Contains custom extensions to LINQ for integrating with Lucene.Net.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.AnyField``1(``0)">
-            <summary>
-             Expression to be used in a LINQ where clauses to search
-             for documents where any field matches a given pattern.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.Boost``1(``0,System.Single)">
-            <summary>
-            Applies a boost to a property in a where clause.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.Boost``1(System.Linq.IQueryable{``0},System.Func{``0,System.Single})">
-            <summary>
-            Applies a custom boost function to customize query scoring. When multiple boost functions
-            are added by calling this method more than once, the return values from each function are
-            multiplied to yield a final result. Warning: this method will cause each document that
-            matches the query to be converted to an instance of <typeparamref name="T"/> in order
-            for the score to be computed, significantly degrading performance.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.BoostInternal``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Single}})">
-            <summary>
-            Applies a custom boost function to customize query scoring. When multiple boost functions
-            are added by calling this method more than once, the return values from each function are
-            multiplied to yield a final result.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.Fuzzy(System.Boolean,System.Single)">
-            <summary>
-            Enables fuzzy matching on the preceeding query clause so that similar but not identical
-            terms are matched.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.CaptureStatistics``1(System.Linq.IQueryable{``0},System.Action{Lucene.Net.Linq.LuceneQueryStatistics})">
-            <summary>
-            Registers a callback to be invoked when the query is executed to provide access to
-            metadata including total hits and execution time.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.Where``1(System.Linq.IQueryable{``0},Lucene.Net.Search.Query)">
-            <summary>
-            Applies the provided Query. Enables queries to be constructed from outside of
-            LINQ to be executed as part of a LINQ query.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.Score``1(``0)">
-            <summary>
-            Expression to be used in a LINQ orderby clause to sort results by score.
-            Note: since score is a decimal based weight, ordering by score normally
-            results in additional orderby clauses having no effect.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.LuceneMethods.AllowSpecialCharacters``1(``0)">
-            <summary>
-            Instructs the query parser that a given query pattern
-            in a LINQ where clause should not have special characters
-            (such as <c>*</c>) escaped.
-            
-            Disabling escaping allows prefix, wildcard, phrase and range queries
-            to be parsed from the <paramref name="queryPattern"/> instead of
-            treating it as a verbatim search term.
-            
-            </summary>
-            <example>
-            The following two samples will produce the same <c cref="T:Lucene.Net.Search.Query">Query</c>:
-                <c>
-                    var query = "Foo*";
-            
-                    var results = from doc in documents
-                    where doc.Title == query.AllowSpecialCharacters()
-                    select doc;
-                </c>
-                <c>
-                    var query = "Foo";
-            
-                    var results = from doc in documents
-                    where doc.Title.StartsWith(query)
-                    select doc;
-                </c>
-            </example>
-            <param name="queryPattern"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.ReflectionFieldMapper`1.TryParseKeywordContainingWhitespace(System.String,Lucene.Net.Search.Query@)">
-            <summary>
-            Attempt to determine if a given query pattern contains whitespace and
-            the analyzer does not tokenize on whitespace. This is a work-around
-            for cases when QueryParser would split a keyword that contains whitespace
-            into multiple tokens.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.ReflectionFieldMapper`1.IsWildcardPattern(System.String)">
-            <summary>
-            Determine if a (potentially escaped) pattern contains
-            any non-escaped wildcard characters such as <c>*</c> or <c>?</c>.
-            </summary>
-        </member>
-        <member name="M:Lucene.Net.Linq.Mapping.ReflectionFieldMapper`1.Unescape(System.String)">
-            <summary>
-            Remove escape characters from a pattern. This method
-            is called when a <see cref="T:Lucene.Net.Search.Query"/> is being created without using
-            <see cref="M:Lucene.Net.QueryParsers.QueryParser.Parse(System.String)"/>.
-            </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Mapping.BaseFieldAttribute">
             <summary>
@@ -1360,6 +982,65 @@
         <member name="F:Lucene.Net.Linq.Mapping.IndexMode.NotAnalyzedNoNorms">
             <see cref="F:Lucene.Net.Documents.Field.Index.NOT_ANALYZED_NO_NORMS"/>
         </member>
+        <member name="M:Lucene.Net.Linq.Mapping.ReflectionFieldMapper`1.TryParseKeywordContainingWhitespace(System.String,Lucene.Net.Search.Query@)">
+            <summary>
+            Attempt to determine if a given query pattern contains whitespace and
+            the analyzer does not tokenize on whitespace. This is a work-around
+            for cases when QueryParser would split a keyword that contains whitespace
+            into multiple tokens.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.ReflectionFieldMapper`1.IsWildcardPattern(System.String)">
+            <summary>
+            Determine if a (potentially escaped) pattern contains
+            any non-escaped wildcard characters such as <c>*</c> or <c>?</c>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.ReflectionFieldMapper`1.Unescape(System.String)">
+            <summary>
+            Remove escape characters from a pattern. This method
+            is called when a <see cref="T:Lucene.Net.Search.Query"/> is being created without using
+            <see cref="M:Lucene.Net.QueryParsers.QueryParser.Parse(System.String)"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.ReflectionFieldMapper`1.CreatePropertyGetter(System.Reflection.PropertyInfo)">
+            <summary>
+            Creates a property getter method with Lambda Expressions.
+            </summary>
+            <param name="propertyInfo">The property info.</param>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.ReflectionFieldMapper`1.CreatePropertySetter(System.Reflection.PropertyInfo)">
+            <summary>
+            Creates a property setter method with Lambda Expressions.
+            </summary>
+            <param name="propertyInfo">The property info.</param>
+        </member>
+        <member name="T:Lucene.Net.Linq.Mapping.ReflectionDocumentMapper`1">
+            <summary>
+            Maps public properties on <typeparamref name="T"/> to
+            Lucene <see cref="T:Lucene.Net.Documents.Field"/>s using optional metadata
+            attributes such as <see cref="T:Lucene.Net.Linq.Mapping.FieldAttribute"/>,
+            <see cref="T:Lucene.Net.Linq.Mapping.NumericFieldAttribute"/>,
+            <see cref="T:Lucene.Net.Linq.Mapping.IgnoreFieldAttribute"/>,
+            <see cref="T:Lucene.Net.Linq.Mapping.DocumentKeyAttribute"/>
+            and <see cref="T:Lucene.Net.Linq.Mapping.QueryScoreAttribute"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.ReflectionDocumentMapper`1.#ctor(Lucene.Net.Util.Version)">
+            <summary>
+            Constructs an instance that will create an <see cref="T:Lucene.Net.Analysis.Analyzer"/>
+            using metadata on public properties on the type <typeparamref name="T"/>.
+            </summary>
+            <param name="version">Version compatibility for analyzers and indexers.</param>
+        </member>
+        <member name="M:Lucene.Net.Linq.Mapping.ReflectionDocumentMapper`1.#ctor(Lucene.Net.Util.Version,Lucene.Net.Analysis.Analyzer)">
+            <summary>
+            Constructs an instance with an externall supplied analyzer
+            and the compatibility version of the index.
+            </summary>
+            <param name="version">Version compatibility for analyzers and indexers.</param>
+            <param name="externalAnalyzer"></param>
+        </member>
         <member name="T:Lucene.Net.Linq.Mapping.StoreMode">
             <see cref="T:Lucene.Net.Documents.Field.Store"/>
         </member>
@@ -1368,6 +1049,14 @@
         </member>
         <member name="F:Lucene.Net.Linq.Mapping.StoreMode.No">
             <see cref="F:Lucene.Net.Documents.Field.Store.NO"/>
+        </member>
+        <member name="M:Lucene.Net.Linq.RelinqQueryParserFactory.CreateExpressionTreeProcessor">
+            <summary>
+            Creates an <c cref="T:Remotion.Linq.Parsing.Structure.IExpressionTreeProcessor"/> that will execute
+            <c cref="T:Lucene.Net.Linq.Transformation.AllowSpecialCharactersExpressionTransformer"/>
+            before executing <c cref="T:Remotion.Linq.Parsing.Structure.ExpressionTreeProcessors.PartialEvaluatingExpressionTreeProcessor"/>
+            and other default processors. 
+            </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Transformation.TreeVisitors.BooleanBinaryToQueryPredicateExpressionTreeVisitor">
             <summary>
@@ -1394,11 +1083,6 @@
             Converts pointless BinaryExpressions like "True AndAlso Expression"
             or "False OrElse Expression" to take only the right side.  Applies
             recursively to collapse deeply nested pointless expressions.
-            </summary>
-        </member>
-        <member name="T:Lucene.Net.Linq.Transformation.QueryModelTransformer">
-            <summary>
-            Transforms various expressions in a QueryModel instance to make it easier to convert into a Lucene Query.
             </summary>
         </member>
         <member name="T:Lucene.Net.Linq.Transformation.TreeVisitors.CompareCallToLuceneQueryPredicateExpressionTreeVisitor">
@@ -1433,6 +1117,348 @@
             <summary>
             Replaces MemberExpression instances like [QuerySourceReferenceExpression].PropertyName with <c ref="LuceneQueryFieldExpression"/>
             </summary>
+        </member>
+        <member name="T:Lucene.Net.Linq.Transformation.QueryModelTransformer">
+            <summary>
+            Transforms various expressions in a QueryModel instance to make it easier to convert into a Lucene Query.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.Context.ReopenSearcher(Lucene.Net.Search.IndexSearcher@)">
+            <summary>
+            Reopen the <see cref="T:Lucene.Net.Index.IndexReader"/>. If the index has not changed,
+            return <c>false</c>. If the index has changed, set <paramref name="searcher"/>
+            with a new <see cref="T:Lucene.Net.Search.IndexSearcher"/> instance and return <c>true</c>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.ISession`1.Add(Lucene.Net.Linq.KeyConstraint,`0[])">
+            <summary>
+            Add items to the index allowing for specific key constraint behavior
+            </summary>
+            <param name="constraint"><see cref="F:Lucene.Net.Linq.KeyConstraint.Unique"/> is the default behavior, <see cref="F:Lucene.Net.Linq.KeyConstraint.None"/> will
+            not perform a delete operation to ensure uniqueness</param>
+            <param name="items"></param>
+        </member>
+        <member name="T:Lucene.Net.Linq.ObjectFactory`1">
+            <summary>
+            Delegate used by <see cref="T:Lucene.Net.Linq.LuceneDataProvider"/> to create instances of objects that do not
+            have public default constructors.
+            </summary>
+            <typeparam name="T">The type of object <see cref="T:Lucene.Net.Documents.Document"/>s will be mapped onto.</typeparam>
+            <returns>An instance of <paramref name="T"/></returns>
+        </member>
+        <member name="T:Lucene.Net.Linq.ObjectLookup`1">
+            <summary>
+            Delegate used by <see cref="T:Lucene.Net.Linq.LuceneDataProvider"/> to create or reuse instances of objects
+            for advanced clients that may wish to provide caching.
+            </summary>
+            <typeparam name="T">The type of object <see cref="T:Lucene.Net.Documents.Document"/>s will be mapped onto.</typeparam>
+            <param name="key">A key that uniquely identifies the <see cref="T:Lucene.Net.Documents.Document"/>.</param>
+            <returns>An instance of <paramref name="T"/></returns>
+        </member>
+        <member name="T:Lucene.Net.Linq.LuceneDataProvider">
+            <summary>
+            Provides IQueryable access to a Lucene.Net index as well as an API
+            for adding, deleting and replacing documents within atomic transactions.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Analysis.Analyzer,Lucene.Net.Util.Version)">
+            <summary>
+            Constructs a new instance with a client-provided <see cref="P:Lucene.Net.Linq.LuceneDataProvider.Analyzer"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Util.Version)">
+            <summary>
+            Constructs a new instance.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Util.Version,Lucene.Net.Index.IndexWriter)">
+            <summary>
+            Constructs a new instance with an externally provided <see cref="P:Lucene.Net.Linq.LuceneDataProvider.IndexWriter"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Analysis.Analyzer,Lucene.Net.Util.Version,Lucene.Net.Index.IndexWriter)">
+            <summary>
+            Constructs a new instance with a client-provided <see cref="P:Lucene.Net.Linq.LuceneDataProvider.Analyzer"/> and <see cref="P:Lucene.Net.Linq.LuceneDataProvider.IndexWriter"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Util.Version,Lucene.Net.Linq.Abstractions.IIndexWriter,System.Object)">
+            <summary>
+            Constructs a new instance with a client provided <see cref="P:Lucene.Net.Linq.LuceneDataProvider.Analyzer"/>.
+            If the supplied IndexWriter will be written to outside of this instance of LuceneDataProvider,
+            the <paramref name="transactionLock"/> will be used to coordinate writes.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Analysis.Analyzer,Lucene.Net.Util.Version,Lucene.Net.Linq.Abstractions.IIndexWriter,System.Object)">
+            <summary>
+            Constructs a new instance.
+            If the supplied IndexWriter will be written to outside of this instance of LuceneDataProvider,
+            the <paramref name="transactionLock"/> will be used to coordinate writes.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProvider.Settings">
+            <summary>
+            Settings that enable or disable optional behavior.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.CreateQueryParser``1">
+             <summary>
+             Create a <see cref="T:Lucene.Net.QueryParsers.QueryParser"/> suitable for parsing advanced queries
+             that cannot not expressed as LINQ (e.g. queries submitted by a user).
+            
+             After the instance is returned, options such as <see cref="P:Lucene.Net.QueryParsers.QueryParser.AllowLeadingWildcard"/>
+             and <see cref="P:Lucene.Net.QueryParsers.QueryParser.Field"/> can be customized to the clients needs.
+             </summary>
+             <typeparam name="T">The type of document that queries will be built against.</typeparam>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.CreateQueryParser``1(System.String)">
+             <summary>
+             Create a <see cref="T:Lucene.Net.QueryParsers.QueryParser"/> suitable for parsing advanced queries
+             that cannot not expressed as LINQ (e.g. queries submitted by a user).
+            
+             After the instance is returned, options such as <see cref="P:Lucene.Net.QueryParsers.QueryParser.AllowLeadingWildcard"/>
+             and <see cref="P:Lucene.Net.QueryParsers.QueryParser.Field"/> can be customized to the clients needs.
+             </summary>
+             <typeparam name="T">The type of document that queries will be built against.</typeparam>
+             <param name="defaultSearchField">The default field for queries that don't specify which field to search.
+             For an example query like <c>Lucene OR NuGet</c>, if this argument is set to <c>SearchText</c>,
+             it will produce a query like <c>SearchText:Lucene OR SearchText:NuGet</c>.</param>
+             <returns></returns>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProvider.LuceneVersion">
+            <summary>
+            Gets the index format version provided by constructor.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectFactory{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.AsQueryable``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+            <summary>
+            Returns an IQueryable implementation where the type being mapped
+            from <c cref="T:Lucene.Net.Documents.Document"/> is constructed by a factory delegate.
+            </summary>
+            <typeparam name="T">The type of object that Document will be mapped onto.</typeparam>
+            <param name="lookup">Factory method to instantiate new instances of T.</param>
+            <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.GetIndexedPropertyNames``1">
+            <summary>
+            Returns an enumeration of fields names that are indexed for a given object.
+            This may be useful in conjunction with <see cref="M:Lucene.Net.Linq.LuceneDataProvider.CreateQueryParser``1"/> to
+            allow users to specify advanced custom queries.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0},Lucene.Net.Linq.Mapping.IDocumentModificationDetector{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0},Lucene.Net.Linq.Mapping.IDocumentModificationDetector{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+            <summary>
+            Opens a session for staging changes and then committing them atomically.
+            </summary>
+            <param name="lookup">Factory delegate that creates new instances of <typeparamref name="T"/></param>
+            <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
+            <typeparam name="T">The type of object that will be mapped to <c cref="T:Lucene.Net.Documents.Document"/>.</typeparam>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0},Lucene.Net.Linq.Mapping.IDocumentModificationDetector{``0})">
+            <summary>
+            Opens a session for staging changes and then committing them atomically.
+            </summary>
+            <param name="factory">Factory delegate that creates new instances of <typeparamref name="T"/></param>
+            <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
+            <param name="documentModificationDetector">Helper to determine when instances of <typeparamref name="T"/> are modified
+                and need to be updated in the index when the session is committed.
+            </param>
+            <typeparam name="T">The type of object that will be mapped to <c cref="T:Lucene.Net.Documents.Document"/>.</typeparam>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.OpenSession``1(Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0},Lucene.Net.Linq.Mapping.IDocumentModificationDetector{``0})">
+            <summary>
+            Opens a session for staging changes and then committing them atomically.
+            </summary>
+            <param name="lookup">Factory delegate that resolves instances of <typeparamref name="T"/></param>
+            <param name="documentMapper">Mapper that will convert documents to objects and vice versa.</param>
+            <param name="documentModificationDetector">Helper to determine when instances of <typeparamref name="T"/> are modified
+                and need to be updated in the index when the session is committed.
+            </param>
+            <typeparam name="T">The type of object that will be mapped to <c cref="T:Lucene.Net.Documents.Document"/>.</typeparam>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectFactory{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectFactory{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0})">
+            <summary>
+            <see cref="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})"/>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneDataProvider.RegisterCacheWarmingCallback``1(System.Action{System.Linq.IQueryable{``0}},Lucene.Net.Linq.ObjectLookup{``0},Lucene.Net.Linq.Mapping.IDocumentMapper{``0})">
+             <summary>
+             Registers a callback to be invoked when a new IndexSearcher is being initialized.
+             This method allows an IndexSearcher to be "warmed up" by executing one or more
+             queries before the instance becomes visible on other threads.
+            
+             While callbacks are being executed, other threads will continue to use the previous
+             instance of IndexSearcher if this is not the first instance being initialized.
+            
+             If this is the first instance, other threads will block until all callbacks complete.
+             </summary>
+        </member>
+        <member name="P:Lucene.Net.Linq.LuceneDataProvider.IndexWriter">
+            <summary>
+            Retrieves the instance of IndexWriter that will be used by all
+            sessions created by this instance. If the current writer has
+            been disposed or a rollback occurred, a new instance will be
+            created, unless the instance was passed in as a constructor
+            parameter.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Linq.LuceneMethods">
+            <summary>
+            Contains custom extensions to LINQ for integrating with Lucene.Net.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.AnyField``1(``0)">
+            <summary>
+             Expression to be used in a LINQ where clauses to search
+             for documents where any field matches a given pattern.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.Boost``1(``0,System.Single)">
+            <summary>
+            Applies a boost to a property in a where clause.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.Boost``1(System.Linq.IQueryable{``0},System.Func{``0,System.Single})">
+            <summary>
+            Applies a custom boost function to customize query scoring. When multiple boost functions
+            are added by calling this method more than once, the return values from each function are
+            multiplied to yield a final result. Warning: this method will cause each document that
+            matches the query to be converted to an instance of <typeparamref name="T"/> in order
+            for the score to be computed, significantly degrading performance.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.BoostInternal``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Single}})">
+            <summary>
+            Applies a custom boost function to customize query scoring. When multiple boost functions
+            are added by calling this method more than once, the return values from each function are
+            multiplied to yield a final result.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.Fuzzy(System.Boolean,System.Single)">
+            <summary>
+            Enables fuzzy matching on the preceeding query clause so that similar but not identical
+            terms are matched.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.CaptureStatistics``1(System.Linq.IQueryable{``0},System.Action{Lucene.Net.Linq.LuceneQueryStatistics})">
+            <summary>
+            Registers a callback to be invoked when the query is executed to provide access to
+            metadata including total hits and execution time.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.Where``1(System.Linq.IQueryable{``0},Lucene.Net.Search.Query)">
+            <summary>
+            Applies the provided Query. Enables queries to be constructed from outside of
+            LINQ to be executed as part of a LINQ query.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.Score``1(``0)">
+            <summary>
+            Expression to be used in a LINQ orderby clause to sort results by score.
+            Note: since score is a decimal based weight, ordering by score normally
+            results in additional orderby clauses having no effect.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Linq.LuceneMethods.AllowSpecialCharacters``1(``0)">
+            <summary>
+            Instructs the query parser that a given query pattern
+            in a LINQ where clause should not have special characters
+            (such as <c>*</c>) escaped.
+            
+            Disabling escaping allows prefix, wildcard, phrase and range queries
+            to be parsed from the <paramref name="queryPattern"/> instead of
+            treating it as a verbatim search term.
+            
+            </summary>
+            <example>
+            The following two samples will produce the same <c cref="T:Lucene.Net.Search.Query">Query</c>:
+                <c>
+                    var query = "Foo*";
+            
+                    var results = from doc in documents
+                    where doc.Title == query.AllowSpecialCharacters()
+                    select doc;
+                </c>
+                <c>
+                    var query = "Foo";
+            
+                    var results = from doc in documents
+                    where doc.Title.StartsWith(query)
+                    select doc;
+                </c>
+            </example>
+            <param name="queryPattern"></param>
+            <returns></returns>
         </member>
         <member name="M:Lucene.Net.Linq.Util.NumericRangeUtils.ToNumericFieldValue(System.ValueType)">
             <summary>

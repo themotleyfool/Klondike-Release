@@ -226,6 +226,13 @@
             Changes the API key of the authenticated user.
             </summary>
         </member>
+        <member name="T:NuGet.Lucene.Web.Filters.OwinPathEncodingFilter">
+            <summary>
+            The Katana project (OWIN) incorrectly escapes/encodes characters such as parentheses
+            on incoming request paths which in turn causes `next link` in paginated responses to
+            be malformed. This filter unencodes these characters to work around the issue.
+            </summary>
+        </member>
         <member name="T:NuGet.Lucene.Web.Formatters.MalformedMultipartFixingStream">
              <summary>
              NuGet client (as of 2.8.2) uses wrong newline character before closing
